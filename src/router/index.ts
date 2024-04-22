@@ -1,11 +1,17 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
+import CesiumBox from '@/views/cesium/cesiumBox.vue'
 
 const routes: Array<RouteRecordRaw> = [
   {
     path: '/',
     name: 'home',
     component: HomeView
+  },
+  {
+    path: '/cesium',
+    name: 'cesium',
+    component: CesiumBox
   },
   {
     path: '/about',
