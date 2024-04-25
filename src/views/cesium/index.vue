@@ -5,7 +5,7 @@
 </template>
 
 <script setup lang="ts">
-  import CesiumBox from '@/components/cesium/index.vue'
+  import CesiumBox from '@/components/cesium/cesiumBox.vue'
 </script>
 
 <style lang="scss" scoped>

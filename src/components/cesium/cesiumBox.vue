@@ -1,9 +1,9 @@
 <template>
-    <div class="cesium">1111</div>
+  <div class="cesium">1111</div>
 </template>
 
 <script setup lang="ts">
-    import Cesium from 'cesium'
+  import * as Cesium from 'cesium'
 
     
 </script>
