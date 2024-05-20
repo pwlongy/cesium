@@ -1,28 +1,31 @@
 import * as Cesium from 'cesium'
-interface Options {
-    BoxName: string;  // 容器盒子
-    mapType: string;  // 地图类型， 天地图、高德地图
-}
-class initCesium{
-    constructor(options: Options) {
-        
+
+class initCesium {
+    BoxName: String = '';
+    constructor(BoxName: String) {
+        if (!BoxName) {
+            console.log("地图容器盒子为必传字段")
+            return
+        }
+        this.BoxName = BoxName
     }
     //  初始化地图
-    initMap():void {
-
+    initMap(): any {
+        let Viewer:any = new Cesium.Viewer(this.BoxName)
+        return Viewer
     }
 
     // 添加地图点位
-    addPoint():void {
+    addPoint(): void {
 
     }
 
     // 点位移动
-    pointMove():void {
+    pointMove(): void {
 
     }
 
 
 }
 
-export  default  initCesium
+export default initCesium
