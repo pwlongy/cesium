@@ -48,7 +48,6 @@ const bigList = ref(list)
 let newlist = computed(() => {
   return bigList.value.slice(start, end)
 })
-console.log(newlist)
 </script>
 
 <style scoped lang="scss">
