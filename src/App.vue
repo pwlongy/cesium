@@ -9,7 +9,13 @@
 *::after {
   box-sizing: border-box;
 }
-
+body, html{
+  width: 100%;
+  height: 100%;
+}
+#app{
+  height: 100%;
+}
 /* Remove default margin */
 body,
 h1,
