@@ -8,8 +8,12 @@ import initCesium from './model/initCesium'
 import {onMounted} from "vue"
 
 onMounted(() => {
+    let options = {
+      boxName: "cesiumcontainer"
+    }
+
     // 初始化地图
-    let Viewer = new initCesium("cesiumcontainer")
+    let Viewer = new initCesium(options)
 
     console.log(Viewer)
 })
