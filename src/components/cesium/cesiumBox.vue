@@ -1,26 +1,25 @@
 <template>
-    <div id="cesiumcontainer"></div>
+  <div id="cesiumcontainer"></div>
 </template>
 
 <script setup lang="ts">
-
-import initCesium from './model/initCesium'
-import {onMounted} from "vue"
+import initCesium from "./model/initCesium";
+import { onMounted } from "vue";
 
 onMounted(() => {
-    let options = {
-      boxName: "cesiumcontainer"
-    }
+  let options = {
+    boxName: "cesiumcontainer",
+  };
 
-    // 初始化地图
-    let Viewer = new initCesium(options)
+  // 初始化地图
+  let Viewer = new initCesium(options);
 
-    console.log(Viewer)
-})
+  console.log(Viewer);
+});
 </script>
 
 <style lang="scss" scoped>
-#cesiumcontainer{
+#cesiumcontainer {
   width: 100%;
   height: 100%;
 }
