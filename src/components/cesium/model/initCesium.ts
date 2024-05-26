@@ -1,4 +1,5 @@
 import * as Cesium from "cesium";
+import 'cesium/Build/CesiumUnminified/Widgets/widgets.css'
 Cesium.Ion.defaultAccessToken =
   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI2MzgwYjJjNy1jY2EyLTQzMWQtYTU4NS1mN2JkMDBiMDY0OTkiLCJpZCI6MTgxOTA3LCJpYXQiOjE3MDE0MTU0NzN9.a2wL9Yz-cEomJ7aCjJo_5WlcE5oiQyOepObHkEYyeWw";
 
@@ -21,7 +22,9 @@ class initCesium {
   }
   //  初始化地图
   initMap(): void {
-    this.Viewer = new Cesium.Viewer(this.boxName);
+    this.Viewer = new Cesium.Viewer(this.boxName, {
+      infoBox: false
+    });
   }
 }
 
