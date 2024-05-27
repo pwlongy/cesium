@@ -1,4 +1,5 @@
 import * as Cesium from "cesium";
+import point from './point'
 import 'cesium/Build/CesiumUnminified/Widgets/widgets.css'
 Cesium.Ion.defaultAccessToken =
   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI2MzgwYjJjNy1jY2EyLTQzMWQtYTU4NS1mN2JkMDBiMDY0OTkiLCJpZCI6MTgxOTA3LCJpYXQiOjE3MDE0MTU0NzN9.a2wL9Yz-cEomJ7aCjJo_5WlcE5oiQyOepObHkEYyeWw";
@@ -26,6 +27,13 @@ class initCesium {
       infoBox: false
     });
   }
+  // cesium 点位打点
+  addPoint(){
+
+  }
+
+  // 创建绘制面板
+
 }
 
 export default initCesium;
