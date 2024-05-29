@@ -9,6 +9,9 @@
 *::after {
   box-sizing: border-box;
 }
+.cesium-viewer-bottom {
+  display: none !important;
+}
 body, html{
   width: 100%;
   height: 100%;

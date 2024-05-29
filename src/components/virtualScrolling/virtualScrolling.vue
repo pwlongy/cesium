@@ -13,13 +13,11 @@
 <script setup lang="ts">
 import {
   ref,
-  reactive,
   computed,
-  defineProps,
   onMounted,
   getCurrentInstance,
 } from "vue";
-const props = defineProps({
+  const props = defineProps({
   list: {
     // 数组列表
     type: Array,
@@ -36,6 +34,7 @@ const props = defineProps({
     default: 20,
   },
 });
+  console.log(props)
 
 // 设置默认截取数据位置
 let start: number = 0;

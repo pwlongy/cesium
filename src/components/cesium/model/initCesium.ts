@@ -13,7 +13,17 @@ interface Options {
   geocoder?:boolean | Array<Cesium.GeocoderService>,
   homeButton?: boolean,
   sceneModePicker?: boolean,
-
+  selectionIndicator?: boolean,
+  timeline?: boolean,
+  navigationHelpButton?: boolean,
+  navigationInstructionsInitiallyVisible?: boolean,
+  scene3DOnly?: boolean,
+  shouldAnimate?: boolean,
+  useDefaultRenderLoop? : boolean,
+  targetFrameRate?: number,
+  showRenderLoopErrors?: boolean,
+  useBrowserRecommendedResolution?: boolean,
+  automaticallyTrackDataSourceClocks?: boolean,
 }
 class initCesium {
   Viewer: Cesium.Viewer | null;
@@ -27,13 +37,24 @@ class initCesium {
     }
     this.boxName = boxName;
     this.options = {
-      infoBox: false, 
-      animation: false,
-      baseLayerPicker: false,
-      fullscreenButton: false,
+      infoBox: false,  //信息框
+      animation: false, //动画小部件
+      baseLayerPicker: false, //地图图层组件
+      fullscreenButton: false, //全屏组件
       vrButton: false,
-      homeButton: false,
-      sceneModePicker: false,
+      geocoder: false,    // 搜索
+      homeButton: false, //首页组件
+      sceneModePicker: false, //场景模式
+      selectionIndicator: false, //场景模式
+      timeline: false, // 时间轴
+      navigationHelpButton: false, //场景模式
+      navigationInstructionsInitiallyVisible: false,
+      scene3DOnly: false,
+      shouldAnimate: false,
+      useDefaultRenderLoop: true,
+      showRenderLoopErrors: false,
+      automaticallyTrackDataSourceClocks: false,
+
       ...options,
     }
     
@@ -43,7 +64,9 @@ class initCesium {
   }
   //  初始化地图          
   initMap(): void {
-    this.Viewer = new Cesium.Viewer(this.boxName, this.options); 
+    this.Viewer = new Cesium.Viewer(this.boxName, this.options);
+    console.log(this.Viewer)
+    // this.Viewer._cesiumWidget._creditContainer.style.display = 'none'
   }
   // cesium 点位打点
   addPoint(){
