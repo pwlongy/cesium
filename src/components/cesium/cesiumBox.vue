@@ -10,11 +10,10 @@ onMounted(() => {
   
   let options = {
   };
-
   // 初始化地图
-  let Viewer = new initCesium("cesiumcontainer", options);
+  let viewer = new initCesium("cesiumcontainer", options);
 
-  console.log(Viewer);
+  // console.log(viewer);
 });
 </script>
 
