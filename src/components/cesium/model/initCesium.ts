@@ -31,7 +31,6 @@ class initCesium {
       baseLayerPicker: false,
       fullscreenButton: false,
       vrButton: false,
-      geocode: false,
       homeButton: false,
       sceneModePicker: false,
       ...options,
