@@ -1,7 +1,5 @@
 import * as Cesium from "cesium";
-import point from "./point";
 import "cesium/Build/CesiumUnminified/Widgets/widgets.css";
-import * as cesium from "cesium";
 Cesium.Ion.defaultAccessToken =
   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI2MzgwYjJjNy1jY2EyLTQzMWQtYTU4NS1mN2JkMDBiMDY0OTkiLCJpZCI6MTgxOTA3LCJpYXQiOjE3MDE0MTU0NzN9.a2wL9Yz-cEomJ7aCjJo_5WlcE5oiQyOepObHkEYyeWw";
 
@@ -98,7 +96,7 @@ class initCesium {
 
     // 添加点击事件
     this.bindClick()
-
+    this.setCamerPosition()
     // 在windows中挂载获取摄像头视角信息方法
     window.getCameraMessage = ():void => {
       this.getCameraPosition()
@@ -149,6 +147,18 @@ class initCesium {
     // 获取相机方向
     const cameraDirection = camera.directionWC
     console.log(cameraPosition, cameraDirection)
+  }
+
+  // 设置摄像机位置
+  setCamerPosition(){
+    this.viewer.camera.flyTo({
+      destination: new Cesium.Cartesian3(-2392467.273773407, 5127363.765234839, 2935117.0106312386),
+      orientation: {
+        heading: Cesium.Math.toRadians(720.0),
+        pitch: Cesium.Math.toRadians(-90.0),
+      },
+      duration: 10,
+    });
   }
 
   // 在
