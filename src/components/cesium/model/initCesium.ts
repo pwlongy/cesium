@@ -1,4 +1,7 @@
 import * as Cesium from "cesium";
+import {getuuid} from '@/utils/common/common'
+console.log(getuuid())
+
 import "cesium/Build/CesiumUnminified/Widgets/widgets.css";
 Cesium.Ion.defaultAccessToken =
   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI2MzgwYjJjNy1jY2EyLTQzMWQtYTU4NS1mN2JkMDBiMDY0OTkiLCJpZCI6MTgxOTA3LCJpYXQiOjE3MDE0MTU0NzN9.a2wL9Yz-cEomJ7aCjJo_5WlcE5oiQyOepObHkEYyeWw";
@@ -36,7 +39,7 @@ interface pointFace{
   data?: myObject,
   type?: string,
   imageitem?: File,
-  callback?: function
+  callback?: () => {}
 }
 const subdomains: string[] = ["0", "1", "2", "3", "4", "5", "6", "7"];
 
@@ -194,72 +197,69 @@ class initCesium {
     }
   }
   // cesium 点位打点
-  addPoint(entitiesName:string, pointObj:pointFace):void {
-
-    // 如果经度纬度不在直接不往下执行
-    if (!pointObj.lng || !pointObj.lat) {
-      console.log("点位经纬度数据为必选项")
-      return
-    }
-
-    const img_path:File = require("@/assets/cesium/location2.png");
-    const image:File = pointObj.imageitem ? pointObj.imageitem : img_path;
-    // 添加点位信息
-    const id = pointObj.type === "man" ? data.id : getuuid();
-    const position:Cesium.Cartesian3 = Cesium.Cartesian3.fromDegrees(
-        pointObj.lng,
-        pointObj.lat,
-        10
-    );
-
-    // console.log(position);
-    // 添加基本信息
-    const entity:Cesium.Entity = new Cesium.Entity({
-      position: position,
-      id: pointObj.type ? pointObj.type + id : id,
-      name: "iconbuild" + id,
-      properties: { data : pointObj.data ? pointObj.data : "" },
-      point: {
-        pixelSize: 30, //点的大小
-        color: Cesium.Color.RED.withAlpha(0), //点的颜色
-        outlineWidth: 0, //边框宽度
-        outlineColor: Cesium.Color.WHITE.withAlpha(0), //边框颜色
-      },
-      billboard: {
-        image: image,
-        scale: 1.0,
-        width: 30, // 图标的宽度
-        height: 30, // 图标的高度
-        depthTest: false, // 禁用深度测试
-        disableDepthTestDistance: Number.POSITIVE_INFINITY, // 禁用深度测试
-        // 调整图标的位置
-        pixelOffset: {
-          x: 0,
-          y: 0,
-        },
-      },
-
-      // label: {
-      //   text: data.emp_name ? data.emp_name : "",
-      //   font: "32px",
-      //   // scale: 0.5,
-      //   showBackground: true, //是否显示背景颜色
-      //   backgroundPadding: new Cesium.Cartesian2(10, 5),
-      //   pixelOffset: new Cesium.Cartesian2(0, -30), // 调整文本位置偏移
-      //   horizontalOrigin: Cesium.HorizontalOrigin.CENTER, // 水平对齐方式
-      //   verticalOrigin: Cesium.VerticalOrigin.BOTTOM, // 垂直对齐方式
-      //   fillColor: Cesium.Color.BLACK, // 文本填充颜色
-      //   backgroundColor: Cesium.Color.WHITE, // 背景颜色
-      //   outlineWidth: 1.0,
-      //   // style: Cesium.LabelStyle.FILL_AND_OUTLINE,
-      //   depthTest: false,
-      //   disableDepthTestDistance: Number.POSITIVE_INFINITY, // 层级无限大，可以让其他实体无法遮挡
-      //   show: Boolean(data.emp_name), // 是否显示
-      // },
-    });
-    this.entitiesObj[entitiesName].add(entity);
-    // callback({ entityId: type + id, type: type, ...data });
-  }
+  // addPoint(entitiesName:string, pointObj:pointFace):void {
+  //
+  //   // 如果经度纬度不在直接不往下执行
+  //   if (!pointObj.lng || !pointObj.lat) {
+  //     console.log("点位经纬度数据为必选项")
+  //     return
+  //   }
+  //
+  //   const img_path:File = require("@/assets/cesium/location2.png");
+  //   const image:File = pointObj.imageitem ? pointObj.imageitem : img_path;
+  //   // 添加点位信息
+  //   const id = (pointObj.type === "man" && pointObj.data) ? pointObj.data.id : getuuid();
+  //   const position:Cesium.Cartesian3 = Cesium.Cartesian3.fromDegrees(
+  //       pointObj.lng,
+  //       pointObj.lat,
+  //       10
+  //   );
+  //
+  //   // console.log(position);
+  //   // 添加基本信息
+  //   const entity:Cesium.Entity = new Cesium.Entity({
+  //     position: position,
+  //     id: pointObj.type ? pointObj.type + id : id,
+  //     name: "iconbuild" + id,
+  //     properties: { data : pointObj.data ? pointObj.data : "" },
+  //     point: {
+  //       pixelSize: 30, //点的大小
+  //       color: Cesium.Color.RED.withAlpha(0), //点的颜色
+  //       outlineWidth: 0, //边框宽度
+  //       outlineColor: Cesium.Color.WHITE.withAlpha(0), //边框颜色
+  //     },
+  //     billboard: {
+  //       image: image,
+  //       scale: 1.0,
+  //       width: 30, // 图标的宽度
+  //       height: 30, // 图标的高度
+  //       depthTest: false, // 禁用深度测试
+  //       disableDepthTestDistance: Number.POSITIVE_INFINITY, // 禁用深度测试
+  //       // 调整图标的位置
+  //       pixelOffset: new Cesium.Cartesian2(0,0),
+  //     },
+  //
+  //     // label: {
+  //     //   text: data.emp_name ? data.emp_name : "",
+  //     //   font: "32px",
+  //     //   // scale: 0.5,
+  //     //   showBackground: true, //是否显示背景颜色
+  //     //   backgroundPadding: new Cesium.Cartesian2(10, 5),
+  //     //   pixelOffset: new Cesium.Cartesian2(0, -30), // 调整文本位置偏移
+  //     //   horizontalOrigin: Cesium.HorizontalOrigin.CENTER, // 水平对齐方式
+  //     //   verticalOrigin: Cesium.VerticalOrigin.BOTTOM, // 垂直对齐方式
+  //     //   fillColor: Cesium.Color.BLACK, // 文本填充颜色
+  //     //   backgroundColor: Cesium.Color.WHITE, // 背景颜色
+  //     //   outlineWidth: 1.0,
+  //     //   // style: Cesium.LabelStyle.FILL_AND_OUTLINE,
+  //     //   depthTest: false,
+  //     //   disableDepthTestDistance: Number.POSITIVE_INFINITY, // 层级无限大，可以让其他实体无法遮挡
+  //     //   show: Boolean(data.emp_name), // 是否显示
+  //     // },
+  //   });
+  //   this.entitiesObj[entitiesName].add(entity);
+  //   // callback({ entityId: type + id, type: type, ...data });
+  // }
 
   // 创建绘制面板
 }
