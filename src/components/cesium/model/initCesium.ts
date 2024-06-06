@@ -6,41 +6,13 @@ import "cesium/Build/CesiumUnminified/Widgets/widgets.css";
 Cesium.Ion.defaultAccessToken =
   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI2MzgwYjJjNy1jY2EyLTQzMWQtYTU4NS1mN2JkMDBiMDY0OTkiLCJpZCI6MTgxOTA3LCJpYXQiOjE3MDE0MTU0NzN9.a2wL9Yz-cEomJ7aCjJo_5WlcE5oiQyOepObHkEYyeWw";
 
-interface Options {
-  animation?: boolean; // 控制动画小部件的显示隐藏
-  infoBox?: boolean; // 不展示选中实体的时候展示选中的功能
-  baseLayerPicker?: boolean;
-  fullscreenButton?: boolean;
-  vrButton?: boolean;
-  geocoder?: boolean | Array<Cesium.GeocoderService>;
-  homeButton?: boolean;
-  sceneModePicker?: boolean;
-  selectionIndicator?: boolean;
-  timeline?: boolean;
-  navigationHelpButton?: boolean;
-  navigationInstructionsInitiallyVisible?: boolean;
-  scene3DOnly?: boolean;
-  shouldAnimate?: boolean;
-  useDefaultRenderLoop?: boolean;
-  targetFrameRate?: number;
-  showRenderLoopErrors?: boolean;
-  useBrowserRecommendedResolution?: boolean;
-  automaticallyTrackDataSourceClocks?: boolean;
-}
-interface entitiesObj {
-  [key: string]: Cesium.EntityCollection
-}
-interface myObject{
-  [key:string]: any
-}
-interface pointFace{
-  lat: number,
-  lng:number,
-  data?: myObject,
-  type?: string,
-  imageitem?: File,
-  callback?: () => {}
-}
+import {
+  Options,
+  entitiesObj,
+  myObject,
+  pointFace,
+  pointObj
+} from './interfaceBox/interfaceList'
 const subdomains: string[] = ["0", "1", "2", "3", "4", "5", "6", "7"];
 
 class initCesium {
@@ -180,7 +152,6 @@ class initCesium {
       duration: 10,
     });
   }
-
   // 添加指定集合列表
   setEntitiesObj(entitiesName: string):void{
     this.entitiesObj[entitiesName] = new Cesium.EntityCollection();
@@ -196,6 +167,23 @@ class initCesium {
       this.entitiesObj[key].removeAll()
     }
   }
+
+  // 添加点位
+  addPoint(lng: number, lat: number, options: pointObj):void {
+    const point = this.viewer.entities.add({
+      name: 'Point',
+      position: Cesium.Cartesian3.fromDegrees(-75.59777, 40.03883),
+      point: {
+        pixelSize: 10,
+        color: Cesium.Color.RED,
+        outlineColor: Cesium.Color.WHITE,
+        outlineWidth: 2,
+        scaleByDistance: new Cesium.NearFarScalar(1.5e2, 2.0, 1.5e7, 0.5), // 根据距离缩放大小
+        disableDepthTestDistance: new Cesium.NearFarScalar(1.0, 1000.0, 1000000.0, 2000.0) // 在 1000.0 - 2000.0 距离范围内禁用深度测试
+      }
+    });
+  }
+
   // cesium 点位打点
   // addPoint(entitiesName:string, pointObj:pointFace):void {
   //
