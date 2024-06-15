@@ -12,7 +12,12 @@ onMounted(() => {
   };
   // 初始化地图
   let viewer = new initCesium("cesiumcontainer", options);
-
+  viewer.addPoint(115.01221108836832, 27.581318249016455, {
+    pixelSize: 6,
+    outlineWidth: 1,
+    color: '#fff',
+    outlineColor: "red"
+  })
   // console.log(viewer);
 });
 </script>

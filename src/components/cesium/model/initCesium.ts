@@ -1,6 +1,6 @@
 import * as Cesium from "cesium";
 import {getuuid} from '@/utils/common/common'
-console.log(getuuid())
+// console.log(getuuid())
 
 import "cesium/Build/CesiumUnminified/Widgets/widgets.css";
 Cesium.Ion.defaultAccessToken =
@@ -11,7 +11,8 @@ import {
   entitiesObj,
   myObject,
   pointFace,
-  pointObj
+  pointObj,
+  position
 } from './interfaceBox/interfaceList'
 const subdomains: string[] = ["0", "1", "2", "3", "4", "5", "6", "7"];
 
@@ -60,7 +61,7 @@ class initCesium {
       new Cesium.WebMapTileServiceImageryProvider({
         url:
           "http://t{s}.tianditu.com/img_w/wmts?service=wmts&request=GetTile&version=1.0.0&LAYER=img&tileMatrixSet=w&TileMatrix={TileMatrix}&TileRow={TileRow}&TileCol={TileCol}&style=default&format=tiles&tk=" +
-          "c9ad47bbc7e1f8dc4b84533ad2f6dbc5",
+          "38ff10ec6e54ac30476a21a6bbf61fe4",
         subdomains: subdomains,
         layer: "tdtImgLayer",
         style: "default",
@@ -76,7 +77,7 @@ class initCesium {
         // 影像注记
         url:
           "http://t{s}.tianditu.com/cia_w/wmts?service=wmts&request=GetTile&version=1.0.0&LAYER=cia&tileMatrixSet=w&TileMatrix={TileMatrix}&TileRow={TileRow}&TileCol={TileCol}&style=default.jpg&tk=" +
-          "c9ad47bbc7e1f8dc4b84533ad2f6dbc5",
+          "38ff10ec6e54ac30476a21a6bbf61fe4",
         subdomains: subdomains,
         layer: "tdtCiaLayer",
         style: "default",
@@ -88,7 +89,7 @@ class initCesium {
 
     // 添加点击事件
     this.bindClick()
-    this.setCamerPosition()
+    this.setCamerPosition({x: -2392480.60956927, y: 5127431.693189062, z: 2934902.146746033}, {x: -2392609.893707916, y: 5127106.880787394, z: 2934661.692260771})
     // 在windows中挂载获取摄像头视角信息方法
     window.getCameraMessage = ():void => {
       this.getCameraPosition()
@@ -103,7 +104,7 @@ class initCesium {
         this.viewer.scene.canvas
     );
     // 绑定鼠标点击事件
-    handler.setInputAction((e:Cesium.ScreenSpaceEventHandler.PositionedEvent) => {
+    handler.setInputAction((e:Cesium.ScreenSpaceEventHandler.PositionedEvent):void => {
       // 获取点击的经纬度
       const position = this.viewer.scene.pickPosition(e.position);
       if (Cesium.defined(position)) {
@@ -112,7 +113,6 @@ class initCesium {
         const longitude:number = Cesium.Math.toDegrees(cartographic.longitude);
         const latitude:number = Cesium.Math.toDegrees(cartographic.latitude);
         console.log("Clicked at: " + longitude + ", " + latitude);
-        console.log(new Cesium.Cartesian2(longitude, latitude));
       }
       const pick = this.viewer.scene.pick(e.position);
       if (pick && pick.id) {
@@ -133,23 +133,27 @@ class initCesium {
 
   // 获取相机位置
   getCameraPosition(){
-    const camera = this.viewer.camera
+    const camera:Cesium.Camera = this.viewer.camera
     // 获取相机位置
-    const cameraPosition = camera.positionWC
+    const cameraPosition:Cesium.Cartesian3 = camera.positionWC
     // 获取相机方向
-    const cameraDirection = camera.directionWC
+    const cameraDirection:Cesium.Cartesian3 = camera.directionWC
     console.log(cameraPosition, cameraDirection)
   }
 
   // 设置摄像机位置
-  setCamerPosition(){
+  setCamerPosition(newCurrentPosition:position, newCurrentDirection:position):void{
+    const currentPosition:Cesium.Cartesian3 = new Cesium.Cartesian3(newCurrentPosition.x, newCurrentPosition.y, newCurrentPosition.z)
+    const currentDirection:Cesium.Cartesian3 = new Cesium.Cartesian3(newCurrentDirection.x, newCurrentDirection.y, newCurrentDirection.z)
+    const targetPosition :Cesium.Cartesian3 = Cesium.Cartesian3.add(currentPosition, currentDirection, new Cesium.Cartesian3());
     this.viewer.camera.flyTo({
-      destination: new Cesium.Cartesian3(-2392467.273773407, 5127363.765234839, 2935117.0106312386),
+      destination: currentPosition ,
       orientation: {
-        heading: Cesium.Math.toRadians(0.0),
-        pitch: Cesium.Math.toRadians(-45.0),
+        heading: Cesium.Math.toRadians(0.0), // 方向
+        pitch: Cesium.Math.toRadians(-45.0), // 倾斜角
+        roll : 0  //  // 翻滚角
       },
-      duration: 10,
+      duration: 3, // 时间
     });
   }
   // 添加指定集合列表
@@ -169,20 +173,25 @@ class initCesium {
   }
 
   // 添加点位
-  addPoint(lng: number, lat: number, options: pointObj):void {
-    const point = this.viewer.entities.add({
+  /*
+  *
+  * */
+  addPoint(lng: number, lat: number, options: pointObj = {}):void {
+    // 判断是否添加到指定集合列表中
+    const point:Cesium.Entity = this.viewer.entities.add({
       name: 'Point',
-      position: Cesium.Cartesian3.fromDegrees(-75.59777, 40.03883),
+      position: Cesium.Cartesian3.fromDegrees(lng, lat),
       point: {
-        pixelSize: 10,
-        color: Cesium.Color.RED,
-        outlineColor: Cesium.Color.WHITE,
-        outlineWidth: 2,
+        pixelSize: options.pixelSize ? options.pixelSize :10,
+        color: options.color ? Cesium.Color.fromCssColorString(options.color) :Cesium.Color.RED,
+        outlineColor: options.outlineColor ? Cesium.Color.fromCssColorString(options.outlineColor) : Cesium.Color.WHITE,
+        outlineWidth: options.outlineWidth ? options.outlineWidth : 0,
         scaleByDistance: new Cesium.NearFarScalar(1.5e2, 2.0, 1.5e7, 0.5), // 根据距离缩放大小
-        disableDepthTestDistance: new Cesium.NearFarScalar(1.0, 1000.0, 1000000.0, 2000.0) // 在 1000.0 - 2000.0 距离范围内禁用深度测试
+        disableDepthTestDistance:Number.POSITIVE_INFINITY // 在 1000.0 - 2000.0 距离范围内禁用深度测试
       }
     });
   }
+
 
   // cesium 点位打点
   // addPoint(entitiesName:string, pointObj:pointFace):void {
