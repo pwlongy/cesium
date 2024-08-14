@@ -188,7 +188,17 @@ class initCesium {
         outlineWidth: options.outlineWidth ? options.outlineWidth : 0,
         scaleByDistance: new Cesium.NearFarScalar(1.5e2, 2.0, 1.5e7, 0.5), // 根据距离缩放大小
         disableDepthTestDistance:Number.POSITIVE_INFINITY // 在 1000.0 - 2000.0 距离范围内禁用深度测试
+      },
+      label: {
+        text: '何须问',
+        font: '12px Arial', // 标签字体
+        fillColor: Cesium.Color.YELLOW, // 标签填充颜色
+        outlineColor: Cesium.Color.BLACK, // 标签边框颜色
+        outlineWidth: 0, // 标签边框宽度
+        style: Cesium.LabelStyle.FILL_AND_OUTLINE, // 标签样式
+        pixelOffset: new Cesium.Cartesian2(0, -20) // 标签偏移量
       }
+
     });
   }
 

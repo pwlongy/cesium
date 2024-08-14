@@ -44,11 +44,14 @@ let end: number = 20;
 let currentInstance = getCurrentInstance();
 
 // 处理高度
-onMounted(() => {});
+onMounted(() => {
+
+});
 
 // 创建海量数据
 const list = new Array(200000).fill(null).map((ele, i) => ({ n: i + 1 }));
 const bigList = ref(list);
+console.log(bigList)
 
 // 计算属性截取数据
 let newlist = computed(() => {
@@ -70,13 +73,17 @@ let newlist = computed(() => {
   overflow-y: auto;
 
   .scrllbar {
-    /* height: 3000px;*/
+    //height: 3000px;
   }
 
   .listBox {
     position: absolute;
     left: 0;
     top: 0;
+
+    .item{
+      height: 20px;
+    }
   }
 }
 </style>
