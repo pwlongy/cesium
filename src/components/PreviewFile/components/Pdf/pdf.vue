@@ -1,5 +1,5 @@
 <template>
-  <vue-office-pdf :src="fileSrc" @rendered="rendered" />
+  <vue-office-pdf :src="fileSrc" @rendered="rendered" style="height: 100%" />
 </template>
 
 <script>
