@@ -1,5 +1,6 @@
 
 import * as Cesium from "cesium";
+
 // cesium 的基本配置
 interface Options {
   animation?: boolean; // 控制动画小部件的显示隐藏
@@ -61,11 +62,16 @@ interface pointFace{
   imageitem?: File,
   callback?: (option: myObject) => void
 }
+
+interface dataSourceList{
+  [key:string]: Cesium.CustomDataSource
+}
 export {
   Options,
   entitiesObj,
   myObject,
   pointFace,
   pointObj,
-  position
+  position,
+  dataSourceList
 }

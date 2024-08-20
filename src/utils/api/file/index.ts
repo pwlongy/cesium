@@ -4,7 +4,7 @@ export function downloadFile(fileId:number|null) {
   return request({
     url: "/api/file/download/" + fileId,
     method: "get",
-    params: {
+    headers: {
       responseType: "blob",
     },
   });

@@ -4,22 +4,52 @@
 
 <script setup lang="ts">
 import initCesium from "./model/initCesium";
+import {
+  myObject,
+} from './model/interfaceBox/interfaceList'
 import { onMounted } from "vue";
-
+// 用于保存实体集合对象的列表
 onMounted(() => {
-  
   let options = {
   };
   // 初始化地图
   let viewer = new initCesium("cesiumcontainer", options);
-  viewer.addPoint(115.01221108836832, 27.581318249016455, {
-    pixelSize: 6,
-    outlineWidth: 1,
-    color: '#fff',
-    outlineColor: "red"
-  })
-  // console.log(viewer);
+  // 设置点击实体事件
+  viewer.setPointClick(clickPoint)
+  // viewer.addPoint(115.01221108836832, 27.581318249016455, {
+  //   pixelSize: 6,
+  //   outlineWidth: 1,
+  //   color: '#fff',
+  //   outlineColor: "red",
+  // })
+
+  // 添加点位
+  const editEntity = new initCesium.EditEntity(viewer.viewer)
+  // 统一管理实体
+  editEntity.creatDataSource('test')
+  // 添加点位
+  const params = {
+    data: {
+      name: 'test'
+    },
+    point: {
+      pixelSize: 0
+    },
+    label: {
+      text: '何须问',
+      Offsety: -30
+    },
+    // billboard: {
+    //   Offsety: 0
+    // }
+  }
+  editEntity.addPoint(115.01221108836832, 27.581318249016455, params, 'test')
 });
+
+// 设置点击实体
+let clickPoint= (data: myObject):void =>{
+  console.log(121111111, data)
+}
 </script>
 
 <style lang="scss" scoped>
