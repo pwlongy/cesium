@@ -2,7 +2,8 @@
 import * as Cesium from "cesium";
 import {
   myObject,
-  dataSourceList
+  dataSourceList,
+  timeObj
 } from './interfaceBox/interfaceList'
 class editEntity{
   viewer: Cesium.Viewer
@@ -92,7 +93,7 @@ class editEntity{
 
 
   // 绘制线条
-  addPolyline(lineList:number[] = [], options:myObject = {}, dataSourceName: string) {
+  addPolyline(lineList:number[][] = [], options:myObject = {}, dataSourceName: string) {
     if (lineList.length == 0) {
       console.log("请传递线条的经纬信息");
       return;
@@ -101,7 +102,7 @@ class editEntity{
     viewer.entities.add({
       name: options.name || "Red line",
       polyline: {
-        positions: Cesium.Cartesian3.fromDegreesArray(lineList),
+        positions: Cesium.Cartesian3.fromDegreesArray(lineList.flat()),
         width: options.width || 5,
         material: this.setColor(options.color) || Cesium.Color.RED,
       },
@@ -123,6 +124,79 @@ class editEntity{
             this.setColor(options.color) || Cesium.Color.BLUE.withAlpha(0.5),
       },
     });
+  }
+
+  // 绘制轨迹回放功能
+  linePlay(lineList:number[][] = [], timeSpace: number,  options={}, dataSourceName: string): timeObj | undefined{
+    // 判断数据是否存在
+    if(!lineList.length ){
+      console.log("轨迹路线为必传项")
+      return
+    }
+    // 判断数据源是否存在
+    const viewer: Cesium.Viewer | Cesium.CustomDataSource =   this.dataSource[dataSourceName] || this.viewer
+    // 定义路径
+    const property:Cesium.SampledPositionProperty = new Cesium.SampledPositionProperty()
+    // 定义时间范围
+    const startTime: Date = new Date()
+    let stopTime: Date = startTime
+    const startTimeStamp:number = startTime.getTime()
+
+    // 先添加一条原有轨迹
+    this.addPolyline(lineList, {},'ManageLine')
+
+    // 添加每一个时间段的位置
+    lineList.forEach((item, index) => {
+      const time:Date = new Date(startTimeStamp + index * timeSpace * 1000)
+      stopTime = time
+      const position:Cesium.Cartesian3 = Cesium.Cartesian3.fromDegrees(item[0], item[1]);
+      property.addSample(Cesium.JulianDate.fromDate(time), position);
+    })
+
+    // 使用插值算法
+    property.setInterpolationOptions({
+      interpolationDegree: 0.01,
+      interpolationAlgorithm: Cesium.LagrangePolynomialApproximation,
+    });
+
+    // 添加轨迹
+    const entitidd:Cesium.Entity = viewer.entities.add({
+      availability: new Cesium.TimeIntervalCollection([
+        new Cesium.TimeInterval({
+          start: Cesium.JulianDate.fromDate(startTime),
+          stop: Cesium.JulianDate.fromDate(stopTime),
+        }),
+      ]),
+      position: property,
+      billboard: {
+        image: require("@/assets/image/icon/videoPoint.png"),
+        scale: 0.5,
+        pixelOffset: new Cesium.Cartesian2(0, -20),
+        heightReference: Cesium.HeightReference.CLAMP_TO_GROUND,
+      },
+      path: {
+        leadTime: 0,
+        resolution: 1,
+        material: new Cesium.PolylineGlowMaterialProperty({
+          glowPower: 0.1,
+          color: Cesium.Color.GREEN,
+        }),
+        width: 30,
+      },
+    });
+
+    return {
+      startTime: startTime,
+      stopTime: stopTime
+    }
+  }
+
+  // 播放时间轴
+  playclock(startTime:Date, stopTime:Date){
+    this.viewer.clock.currentTime = Cesium.JulianDate.fromDate(startTime) // 修改时间轴为当前时间
+    this.viewer.clock.stopTime = Cesium.JulianDate.fromDate(stopTime);
+    this.viewer.clock.clockRange = Cesium.ClockRange.LOOP_STOP; // 只执行一遍
+    this.viewer.clock.shouldAnimate = true // 开始播放
   }
 
 

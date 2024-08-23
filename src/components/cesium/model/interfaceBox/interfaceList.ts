@@ -66,6 +66,11 @@ interface pointFace{
 interface dataSourceList{
   [key:string]: Cesium.CustomDataSource
 }
+
+interface timeObj{
+  startTime: Date,
+  stopTime: Date
+}
 export {
   Options,
   entitiesObj,
@@ -73,5 +78,6 @@ export {
   pointFace,
   pointObj,
   position,
-  dataSourceList
+  dataSourceList,
+  timeObj
 }

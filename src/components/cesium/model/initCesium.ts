@@ -1,6 +1,4 @@
 import * as Cesium from "cesium";
-import {getuuid} from '@/utils/common/common'
-// console.log(getuuid())
 
 import "cesium/Build/CesiumUnminified/Widgets/widgets.css";
 Cesium.Ion.defaultAccessToken =

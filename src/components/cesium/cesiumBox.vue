@@ -44,6 +44,34 @@ onMounted(() => {
     // }
   }
   editEntity.addPoint(115.01221108836832, 27.581318249016455, params, 'test')
+
+
+  // 添加轨迹移动
+  // 绘制线条
+  editEntity.creatDataSource('ManageLine')
+  // 线条数据
+  let lineData = [
+    [-72.1641667, 39.9522222],
+    [-75.1, 39.57],
+    [-76.1, 34.57],
+    [-78.1, 28.57],
+    [-79.1, 23.57],
+    [-80.12, 25.46],
+    [-85.12, 26.46],
+    [-91.12, 28.46],
+    [-100.56, 30.67],
+    [-98.56, 34.67],
+    [-95.56, 38.67],
+    [-91.56, 39.67],
+    [-90.75, 40.24],
+  ];
+  let Lineparams = {
+
+  }
+  let timeObj = editEntity.linePlay(lineData, 5, Lineparams, 'ManageLine')
+  if(timeObj && Object.keys(timeObj)){
+    editEntity.playclock(timeObj.startTime, timeObj.stopTime)
+  }
 });
 
 // 设置点击实体
