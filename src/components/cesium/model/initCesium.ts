@@ -128,7 +128,7 @@ class initCesium {
           // this.$refs.workDetail.show = true;
         }
       }
-    }, Cesium.ScreenSpaceEventType.LEFT_CLICK);
+    }, Cesium.ScreenSpaceEventType.LEFT_CLICK); 
   }
 
   // 获取相机位置
