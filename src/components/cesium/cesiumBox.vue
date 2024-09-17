@@ -49,6 +49,40 @@ onMounted(() => {
   // 添加轨迹移动
   // 绘制线条
   editEntity.creatDataSource('ManageLine')
+
+  // 点位实时移动
+  let pointList = [
+    {
+      lat: -72.1641667,
+      lng: 39.9522222,
+      type: 'man',
+      id: 1
+    },
+    {
+      lat: -75.1,
+      lng: 39.9522222,
+      type: 'man',
+      id: 1
+    },
+    {
+      lat: -76.1,
+      lng: 39.9522222,
+      type: 'man',
+      id: 2
+    },
+    {
+      lat: -78.1,
+      lng: 39.9522222,
+      type: 'man',
+      id: 2
+    },
+  ]
+  
+  editEntity.creatDataSource('man')
+  editEntity.pointMove(pointList, 'man', 5, {})
+
+
+
   // 线条数据
   let lineData = [
     [-72.1641667, 39.9522222],
@@ -65,6 +99,8 @@ onMounted(() => {
     [-91.56, 39.67],
     [-90.75, 40.24],
   ];
+
+
   let Lineparams = {
 
   }

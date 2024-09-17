@@ -92,7 +92,7 @@ class initCesium {
 
     // 添加点击事件
     this.bindClick()
-    this.setCamerPosition({x: -2392480.60956927, y: 5127431.693189062, z: 2934902.146746033}, {x: -2392609.893707916, y: 5127106.880787394, z: 2934661.692260771})
+    // this.setCamerPosition({x: -2392480.60956927, y: 5127431.693189062, z: 2934902.146746033}, {x: -2392609.893707916, y: 5127106.880787394, z: 2934661.692260771})
     // 在windows中挂载获取摄像头视角信息方法
     window.getCameraMessage = ():void => {
       this.getCameraPosition()

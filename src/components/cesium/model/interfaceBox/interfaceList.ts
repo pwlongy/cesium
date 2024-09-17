@@ -48,6 +48,10 @@ interface pointObj {
 interface myObject{
   [key:string]: any
 }
+
+interface myProperty{
+  [key:string]: Cesium.SampledPositionProperty
+}
 // 用于传递坐标位置
 interface position {
   x:number,
@@ -79,5 +83,6 @@ export {
   pointObj,
   position,
   dataSourceList,
-  timeObj
+  timeObj,
+  myProperty
 }

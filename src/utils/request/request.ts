@@ -1,6 +1,7 @@
-import axios from "axios";
+import  axios from "axios";
+import type { InternalAxiosRequestConfig, AxiosResponse, AxiosError  } from 'axios'
 
-// 创建axios实例
+// 创建axios实例AxiosRequestConfig
 const service = axios.create({
   baseURL: process.env.VUE_APP_BASE_API, // 基础URL，可根据实际情况配置
   timeout: 5000, // 请求超时时间
@@ -9,7 +10,7 @@ const service = axios.create({
 
 // 请求拦截器
 service.interceptors.request.use(
-    (config) => {
+    (config: InternalAxiosRequestConfig) => {
       // 设置请求类型
       if (
           config.headers?.responseType === "blob" ||
@@ -25,7 +26,7 @@ service.interceptors.request.use(
 
       return config;
     },
-    (error) => {
+    (error:AxiosError) => {
       // 请求错误处理
       return Promise.reject(error);
     }
@@ -33,7 +34,7 @@ service.interceptors.request.use(
 
 // 响应拦截器
 service.interceptors.response.use(
-    (response) => {
+    (response: AxiosResponse) => {
       const res = response.data;
       // 未设置状态码则默认成功状态
       const code = res.errCode ;
@@ -46,7 +47,7 @@ service.interceptors.response.use(
       ) {
         return res;
       } else if (code == 0 || code == 200) {
-        return res.data || res.datas || res.list;
+        return res;
       } else {
         if (code === 500) {
           // Message({ message: msg, type: "error" });
@@ -60,7 +61,7 @@ service.interceptors.response.use(
         }
       }
     },
-    (error) => {
+    (error: AxiosError) => {
       if (error.response) {
         switch (error.response.status) {
           case 400:
