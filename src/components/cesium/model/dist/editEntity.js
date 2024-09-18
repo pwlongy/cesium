@@ -194,60 +194,65 @@ var editEntity = /** @class */ (function () {
         var startTimeStamp = startTime.getTime();
         moveList.forEach(function (item) {
             if (item.lng && item.lat) {
-                var property_1 = _this.manListproperty[item.type + item.id]
+                var property = _this.manListproperty[item.type + item.id]
                     ? _this.manListproperty[item.type + item.id]
                     : new Cesium.SampledPositionProperty();
                 var time = item.isFirst
                     ? new Date(startTimeStamp)
                     : new Date(startTimeStamp + timeSpace * 1000);
                 var position = Cesium.Cartesian3.fromDegrees(item.lng, item.lat);
-                property_1.addSample(Cesium.JulianDate.fromDate(time), position);
-                console.log(property_1, 233333);
+                property.addSample(Cesium.JulianDate.fromDate(time), position);
+                console.log(property, 233333);
                 // 设置插值算法
-                if (property_1 &&
-                    property_1.interpolationAlgorithm !==
-                        Cesium.LagrangePolynomialApproximation &&
-                    property_1._property._times.length >= 2) {
-                    // 插值算法
-                    property_1.setInterpolationOptions({
-                        interpolationDegree: 0.01,
-                        interpolationAlgorithm: Cesium.LagrangePolynomialApproximation
-                    });
-                }
+                // if (
+                //   property &&
+                //   property.interpolationAlgorithm !==
+                //   Cesium.LagrangePolynomialApproximation &&
+                //   property._property._times.length >= 2 
+                // ) {
+                //   // 插值算法
+                //   property.setInterpolationOptions({
+                //     interpolationDegree: 0.01,
+                //     interpolationAlgorithm: Cesium.LagrangePolynomialApproximation,
+                //   });
+                // }
                 // // 添加实体
-                if (!_this.manListproperty[item.type + item.id]) {
-                    _this.manListproperty[item.type + item.id] = property_1;
-                    viewer.entities.add({
-                        properties: {
-                            data: item
-                        },
-                        id: item.type + item.id,
-                        position: new Cesium.CallbackProperty(function () {
-                            // 获取实时位置
-                            // 当前时间数据
-                            var timeposition = Cesium.JulianDate.fromDate(new Date());
-                            // 将位置转换成为经纬度
-                            if (property_1.getValue(timeposition)) {
-                                var Cartographic = Cesium.Cartographic.fromCartesian(property_1.getValue(timeposition), _this.viewer.scene.globe.ellipsoid);
-                                // Cartographic 获取的为度数，还需要将度数转换成为经纬度
-                                var lng = Cesium.Math.toDegrees(Cartographic.longitude);
-                                var lat = Cesium.Math.toDegrees(Cartographic.latitude);
-                                var entity = _this.getEntity(item.type, item.type + item.id);
-                                //自定义弹窗跟随移动
-                                if (entity && entity.properties && entity.properties.billboardObj) {
-                                    entity.properties.billboardObj.updataPosition({ lat: lat, lng: lng });
-                                    entity.properties.billboarduser.updataPosition({ lat: lat, lng: lng });
-                                    entity.properties.billboardObj.updateBillboardLocation();
-                                    entity.properties.billboarduser.updateBillboardLocation();
-                                }
-                                // 判断点位是否需要计算周边摄像头位置信息
-                                return property_1.getValue(timeposition);
-                            }
-                        }, false),
-                        label: _this.getPointLabel(options === null || options === void 0 ? void 0 : options.label),
-                        billboard: _this.getBillboard(options === null || options === void 0 ? void 0 : options.billboard)
-                    });
-                }
+                // if (!this.manListproperty[item.type + item.id]) {
+                //   this.manListproperty[item.type + item.id] = property;
+                //   viewer.entities.add({
+                //     properties: {
+                //       data: item,
+                //     },
+                //     id: item.type + item.id,
+                //     position: new Cesium.CallbackProperty(() => {
+                //       // 获取实时位置
+                //       // 当前时间数据
+                //       let timeposition = Cesium.JulianDate.fromDate(new Date());
+                //       // 将位置转换成为经纬度
+                //       if (property.getValue(timeposition)) {
+                //         let Cartographic = Cesium.Cartographic.fromCartesian(
+                //           property.getValue(timeposition),
+                //           this.viewer.scene.globe.ellipsoid
+                //         );
+                //         // Cartographic 获取的为度数，还需要将度数转换成为经纬度
+                //         let lng:number = Cesium.Math.toDegrees(Cartographic.longitude);
+                //         let lat:number = Cesium.Math.toDegrees(Cartographic.latitude);
+                //         let entity: Cesium.Entity | undefined = this.getEntity(item.type, item.type + item.id);
+                //         //自定义弹窗跟随移动
+                //         if (entity && entity.properties && entity.properties.billboardObj) {
+                //           entity.properties.billboardObj.updataPosition({ lat, lng })
+                //           entity.properties.billboarduser.updataPosition({ lat, lng })
+                //           entity.properties.billboardObj.updateBillboardLocation();
+                //           entity.properties.billboarduser.updateBillboardLocation()
+                //         }
+                //         // 判断点位是否需要计算周边摄像头位置信息
+                //         return property.getValue(timeposition);
+                //       }
+                //     }, false),
+                //     label: this.getPointLabel(options?.label),
+                //     billboard: this.getBillboard(options?.billboard),
+                //   });
+                // }
             }
         });
     };
