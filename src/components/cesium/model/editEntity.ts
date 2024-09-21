@@ -153,7 +153,7 @@ class editEntity{
       property.addSample(Cesium.JulianDate.fromDate(time), position);
     })
 
-    // 使用插值算法
+    // 使用插值算法 使得移动的时候平滑过渡
     property.setInterpolationOptions({
       interpolationDegree: 0.01,
       interpolationAlgorithm: Cesium.LagrangePolynomialApproximation,
