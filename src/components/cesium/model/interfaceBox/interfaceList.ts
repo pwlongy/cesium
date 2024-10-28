@@ -49,6 +49,15 @@ interface myObject{
   [key:string]: any
 }
 
+interface cameraObj {
+  lat: number, // 纬度
+  lng: number, // 经度
+  heading?: number, // 朝向位置
+  pitch?: number, // 俯仰位置
+  roll?: number, // 旋转角度
+  duration?: number, // 时间
+}
+
 interface myProperty{
   [key:string]: Cesium.SampledPositionProperty
 }
@@ -84,5 +93,6 @@ export {
   position,
   dataSourceList,
   timeObj,
-  myProperty
+  myProperty,
+  cameraObj
 }

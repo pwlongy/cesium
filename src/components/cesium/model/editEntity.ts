@@ -4,7 +4,8 @@ import {
   myObject,
   dataSourceList,
   timeObj,
-  myProperty
+  myProperty,
+  cameraObj
 } from './interfaceBox/interfaceList'
 class editEntity {
   viewer: Cesium.Viewer
@@ -93,6 +94,29 @@ class editEntity {
     } else {
       return {}
     }
+  }
+  // 设置固定位置
+  setFixedPosition(position: cameraObj){
+    this.viewer.camera.setView({
+      destination: Cesium.Cartesian3.fromDegrees(position.lng, position.lat),
+      orientation: {
+        heading: position.heading ? Cesium.Math.toRadians(position.heading) : undefined,
+        pitch: position.pitch ? Cesium.Math.toRadians(position.pitch) : undefined,
+        roll: 0.0
+      }
+    })
+  }
+  // 设置地图平滑移动
+  setFlyTo(position:cameraObj) {
+    this.viewer.camera.flyTo({
+      destination: Cesium.Cartesian3.fromDegrees(position.lng, position.lat),
+      orientation: {
+        heading: position.heading ? Cesium.Math.toRadians(position.heading) : undefined,  //水平视角
+        pitch: position.pitch ? Cesium.Math.toRadians(position.pitch) : undefined,  // 俯仰角度
+        roll: position.roll ? position.roll :  0.0 // 旋转角度
+      },
+      duration: position.duration ? position.duration : 5
+    })
   }
 
 
@@ -278,7 +302,7 @@ class editEntity {
       }
     });
   }
-
+  
   // 实体的统一管理
   // 统一管理数据源数据
   creatDataSource(dataSourceName: string): void {

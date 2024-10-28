@@ -82,6 +82,29 @@ var editEntity = /** @class */ (function () {
             return {};
         }
     };
+    // 设置固定位置
+    editEntity.prototype.setFixedPosition = function (position) {
+        this.viewer.camera.setView({
+            destination: Cesium.Cartesian3.fromDegrees(position.lng, position.lat),
+            orientation: {
+                heading: position.heading ? Cesium.Math.toRadians(position.heading) : undefined,
+                pitch: position.pitch ? Cesium.Math.toRadians(position.pitch) : undefined,
+                roll: 0.0
+            }
+        });
+    };
+    // 设置地图平滑移动
+    editEntity.prototype.setFlyTo = function (position) {
+        this.viewer.camera.flyTo({
+            destination: Cesium.Cartesian3.fromDegrees(position.lng, position.lat),
+            orientation: {
+                heading: position.heading ? Cesium.Math.toRadians(position.heading) : undefined,
+                pitch: position.pitch ? Cesium.Math.toRadians(position.pitch) : undefined,
+                roll: position.roll ? position.roll : 0.0 // 旋转角度
+            },
+            duration: position.duration ? position.duration : 5
+        });
+    };
     // 绘制线条
     editEntity.prototype.addPolyline = function (lineList, options, dataSourceName) {
         if (lineList === void 0) { lineList = []; }

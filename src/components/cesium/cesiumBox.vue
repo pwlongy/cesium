@@ -114,6 +114,15 @@ onMounted(() => {
 let clickPoint= (data: myObject):void =>{
   console.log(121111111, data)
 }
+
+
+
+// cesium中的坐标
+// 1. WGS84弧度坐标 
+//  创建方式 new Cesium.Cartographic(lng, lat, height)
+//  du = radus/pi * 180
+
+
 </script>
 
 <style lang="scss" scoped>
