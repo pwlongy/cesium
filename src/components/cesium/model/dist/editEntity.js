@@ -17,7 +17,6 @@ var editEntity = /** @class */ (function () {
     };
     // 添加点位基本信息
     editEntity.prototype.addPoint = function (lat, lng, options, dataSourceName) {
-        var _a, _b, _c, _d;
         if (options === void 0) { options = {}; }
         if (!lat && !lng) {
             console.log("请上传点位的经纬度");
@@ -28,18 +27,27 @@ var editEntity = /** @class */ (function () {
             position: Cesium.Cartesian3.fromDegrees(lat, lng),
             // id: id,
             // description: options.data,
-            point: {
-                pixelSize: ((_a = options.point) === null || _a === void 0 ? void 0 : _a.pixelSize) || 30,
-                color: this.setColor((_b = options.point) === null || _b === void 0 ? void 0 : _b.color) || Cesium.Color.RED,
-                outlineColor: this.setColor((_c = options.point) === null || _c === void 0 ? void 0 : _c.outlineColor) || Cesium.Color.WHITE,
-                outlineWidth: ((_d = options.point) === null || _d === void 0 ? void 0 : _d.outLineWidth) || 2
-            },
+            point: this.getPoint(options.point),
             properties: {
                 data: options.data
             },
             label: this.getPointLabel(options.label),
             billboard: this.getBillboard(options.billboard)
         });
+    };
+    // 点位配置
+    editEntity.prototype.getPoint = function (point) {
+        if (point && Object.keys(point)) {
+            return {
+                pixelSize: point.pixelSize || 30,
+                color: this.setColor(point.color) || Cesium.Color.RED,
+                outlineColor: this.setColor(point.outlineColor) || Cesium.Color.WHITE,
+                outlineWidth: point.outLineWidth || 2
+            };
+        }
+        else {
+            return {};
+        }
     };
     // 点位label
     editEntity.prototype.getPointLabel = function (label) {

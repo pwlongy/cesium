@@ -37,13 +37,7 @@ class editEntity {
       position: Cesium.Cartesian3.fromDegrees(lat, lng),
       // id: id,
       // description: options.data,
-      point: {
-        pixelSize: options.point?.pixelSize || 30,
-        color: this.setColor(options.point?.color) || Cesium.Color.RED,
-        outlineColor:
-          this.setColor(options.point?.outlineColor) || Cesium.Color.WHITE,
-        outlineWidth: options.point?.outLineWidth || 2,
-      },
+      point: this.getPoint(options.point),
       properties: {
         data: options.data,
       },
@@ -51,7 +45,20 @@ class editEntity {
       billboard: this.getBillboard(options.billboard),
     });
   }
-
+  // 点位配置
+  getPoint(point: myObject):myObject {
+    if(point && Object.keys(point)){
+      return {
+        pixelSize: point.pixelSize || 30,
+        color: this.setColor(point.color) || Cesium.Color.RED,
+        outlineColor:
+          this.setColor(point.outlineColor) || Cesium.Color.WHITE,
+        outlineWidth: point.outLineWidth || 2,
+      }
+    }else {
+      return {}
+    }
+  }
   // 点位label
   getPointLabel(label: myObject): myObject {
     if (label && Object.keys(label).length) {
