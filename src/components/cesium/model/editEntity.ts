@@ -182,7 +182,7 @@ class editEntity {
       property.addSample(Cesium.JulianDate.fromDate(time), position);
     })
 
-    // 使用插值算法
+    // 使用插值算法 使得移动的时候平滑过渡
     property.setInterpolationOptions({
       interpolationDegree: 0.01,
       interpolationAlgorithm: Cesium.LagrangePolynomialApproximation,
@@ -230,75 +230,75 @@ class editEntity {
 
   // 点位移动
   pointMove(moveList: myObject[], dataSourceName?:string, timeSpace:number = 5, options?:myObject) {
-    let viewer = dataSourceName ? this.dataSource[dataSourceName] : this.viewer;
+    const viewer = dataSourceName ? this.dataSource[dataSourceName] : this.viewer;
 
-    let startTime = new Date();
-    let startTimeStamp = startTime.getTime();
+    const startTime = new Date();
+    const startTimeStamp = startTime.getTime();
     moveList.forEach((item) => {
       if (item.lng && item.lat) {
-        let property = this.manListproperty[item.type + item.id]
+        const property = this.manListproperty[item.type + item.id]
           ? this.manListproperty[item.type + item.id]
           : new Cesium.SampledPositionProperty();
-        let time = item.isFirst
+        const time = item.isFirst
           ? new Date(startTimeStamp)
           : new Date(startTimeStamp + timeSpace * 1000);
-        let position = Cesium.Cartesian3.fromDegrees(item.lng, item.lat);
+        const position = Cesium.Cartesian3.fromDegrees(item.lng, item.lat);
         property.addSample(Cesium.JulianDate.fromDate(time), position);
 
         console.log(property, 233333)
         // 设置插值算法
-        // if (
-        //   property &&
-        //   property.interpolationAlgorithm !==
-        //   Cesium.LagrangePolynomialApproximation &&
-        //   property._property._times.length >= 2 
-        // ) {
-        //   // 插值算法
-        //   property.setInterpolationOptions({
-        //     interpolationDegree: 0.01,
-        //     interpolationAlgorithm: Cesium.LagrangePolynomialApproximation,
-        //   });
-        // }
+        if (
+          property &&
+          property.interpolationAlgorithm !==
+          Cesium.LagrangePolynomialApproximation &&
+          property._property._times.length >= 2
+        ) {
+          // 插值算法
+          property.setInterpolationOptions({
+            interpolationDegree: 0.01,
+            interpolationAlgorithm: Cesium.LagrangePolynomialApproximation,
+          });
+        }
 
-        // // 添加实体
-        // if (!this.manListproperty[item.type + item.id]) {
-        //   this.manListproperty[item.type + item.id] = property;
+        // 添加实体
+        if (!this.manListproperty[item.type + item.id]) {
+          this.manListproperty[item.type + item.id] = property;
 
-        //   viewer.entities.add({
-        //     properties: {
-        //       data: item,
-        //     },
-        //     id: item.type + item.id,
-        //     position: new Cesium.CallbackProperty(() => {
-        //       // 获取实时位置
-        //       // 当前时间数据
-        //       let timeposition = Cesium.JulianDate.fromDate(new Date());
-        //       // 将位置转换成为经纬度
-        //       if (property.getValue(timeposition)) {
-        //         let Cartographic = Cesium.Cartographic.fromCartesian(
-        //           property.getValue(timeposition),
-        //           this.viewer.scene.globe.ellipsoid
-        //         );
-        //         // Cartographic 获取的为度数，还需要将度数转换成为经纬度
-        //         let lng:number = Cesium.Math.toDegrees(Cartographic.longitude);
-        //         let lat:number = Cesium.Math.toDegrees(Cartographic.latitude);
-        //         let entity: Cesium.Entity | undefined = this.getEntity(item.type, item.type + item.id);
-        //         //自定义弹窗跟随移动
-        //         if (entity && entity.properties && entity.properties.billboardObj) {
-        //           entity.properties.billboardObj.updataPosition({ lat, lng })
-        //           entity.properties.billboarduser.updataPosition({ lat, lng })
-        //           entity.properties.billboardObj.updateBillboardLocation();
-        //           entity.properties.billboarduser.updateBillboardLocation()
-        //         }
+          viewer.entities.add({
+            properties: {
+              data: item,
+            },
+            id: item.type + item.id,
+            position: new Cesium.CallbackProperty(() => {
+              // 获取实时位置
+              // 当前时间数据
+              const timeposition = Cesium.JulianDate.fromDate(new Date());
+              // 将位置转换成为经纬度
+              if (property.getValue(timeposition)) {
+                const Cartographic = Cesium.Cartographic.fromCartesian(
+                  property.getValue(timeposition),
+                  this.viewer.scene.globe.ellipsoid
+                );
+                // Cartographic 获取的为度数，还需要将度数转换成为经纬度
+                const lng:number = Cesium.Math.toDegrees(Cartographic.longitude);
+                const lat:number = Cesium.Math.toDegrees(Cartographic.latitude);
+                const entity: Cesium.Entity | undefined = this.getEntity(item.type, item.type + item.id);
+                //自定义弹窗跟随移动
+                if (entity && entity.properties && entity.properties.billboardObj) {
+                  entity.properties.billboardObj.updataPosition({ lat, lng })
+                  entity.properties.billboarduser.updataPosition({ lat, lng })
+                  entity.properties.billboardObj.updateBillboardLocation();
+                  entity.properties.billboarduser.updateBillboardLocation()
+                }
 
-        //         // 判断点位是否需要计算周边摄像头位置信息
-        //         return property.getValue(timeposition);
-        //       }
-        //     }, false),
-        //     label: this.getPointLabel(options?.label),
-        //     billboard: this.getBillboard(options?.billboard),
-        //   });
-        // }
+                // 判断点位是否需要计算周边摄像头位置信息
+                return property.getValue(timeposition);
+              }
+            }, false),
+            label: this.getPointLabel(options?.label),
+            billboard: this.getBillboard(options?.billboard),
+          });
+        }
       }
     });
   }

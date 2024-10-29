@@ -4,6 +4,7 @@
 
 <script setup lang="ts">
 import initCesium from "./model/initCesium";
+
 import {
   myObject,
 } from './model/interfaceBox/interfaceList'
@@ -121,6 +122,8 @@ let clickPoint= (data: myObject):void =>{
 // 1. WGS84弧度坐标 
 //  创建方式 new Cesium.Cartographic(lng, lat, height)
 //  du = radus/pi * 180
+// 弧度转经纬度
+// let degrees = Cesium.cesiumMath.toDegree(radians)
 
 
 </script>
