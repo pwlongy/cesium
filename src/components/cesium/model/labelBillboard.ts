@@ -94,9 +94,11 @@ export default class labelBillboard {
         this.position,
         windowPosition
       );
-      this.element.style.bottom = canvasHeight - windowPosition.y + "px";
-      const elWidth = this.element.offsetWidth;
-      this.element.style.left = windowPosition.x - elWidth / 2 + "px";
+      if(typeof this.element !== 'string' ){
+        this.element.style.bottom = canvasHeight - windowPosition.y + "px";
+        const elWidth = this.element.offsetWidth;
+        this.element.style.left = windowPosition.x - elWidth / 2 + "px";
+      }
 
       const camerPosition = this.viewer.camera.position;
       let height =
@@ -111,11 +113,14 @@ export default class labelBillboard {
           ) &&
           this.viewer.camera.positionCartographic.height < this.maxRenderDis
         ) {
+          if(typeof this.element ==='string') return
           this.element.style.display = "block";
         } else {
+          if(typeof this.element ==='string') return
           this.element.style.display = "none";
         }
       } else {
+        if(typeof this.element ==='string') return
         this.element.style.display = "none";
       }
     }
