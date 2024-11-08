@@ -111,7 +111,21 @@
   </div>
 </template>
 
-<script setup></script>
+<script setup lang="ts">
+// 单一文件上传
+
+// 单一文件上传「BASE64」，只适合图片
+
+// 单一文件上传「BASE64」，只适合图片
+
+// 单一文件上传「进度管控」
+
+// 多文件上传
+
+// 拖拽上传
+
+// 大文件上传
+</script>
 
 <style scoped lang="scss">
 .container{
