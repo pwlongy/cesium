@@ -280,10 +280,11 @@ class editEntity {
               // 获取实时位置
               // 当前时间数据
               const timeposition = Cesium.JulianDate.fromDate(new Date());
+              const cartesian = property.getValue(timeposition)
               // 将位置转换成为经纬度
-              if (property.getValue(timeposition)) {
+              if (cartesian) {
                 const Cartographic = Cesium.Cartographic.fromCartesian(
-                  property.getValue(timeposition),
+                    cartesian,
                   this.viewer.scene.globe.ellipsoid
                 );
                 // Cartographic 获取的为度数，还需要将度数转换成为经纬度
