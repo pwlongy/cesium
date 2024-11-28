@@ -4,7 +4,7 @@ import CesiumBox from '@/views/cesium/index.vue'
 const routes: Array<RouteRecordRaw> = [
   {
     path: "/",
-    redirect: "/cesium",
+    redirect: "/biangeng",
   },
   {
     path: "/cesium",
@@ -16,6 +16,11 @@ const routes: Array<RouteRecordRaw> = [
     name: "VirtualScrolling",
     component: () => import("@/views/VirtualScrolling/VirtualScrolling.vue"),
   },
+  {
+    path: "/biangeng",
+    name: 'biangeng',
+    component: () => import("@/views/biangeng/index.vue")
+  }
 ];
 
 const router = createRouter({
