@@ -1,10 +1,11 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router'
 import CesiumBox from '@/views/cesium/index.vue'
+import bigFileUpload from "@/components/bigFileUpload/index.vue"
 
 const routes: Array<RouteRecordRaw> = [
   {
     path: "/",
-    redirect: "/cesium",
+    redirect: "/biangeng"
   },
   {
     path: "/cesium",
@@ -12,10 +13,20 @@ const routes: Array<RouteRecordRaw> = [
     component: CesiumBox,
   },
   {
+    path: "/bigFileUpload",
+    name: "bigFileUpload",
+    component: bigFileUpload,
+  },
+  {
     path: "/VirtualScrolling",
     name: "VirtualScrolling",
     component: () => import("@/views/VirtualScrolling/VirtualScrolling.vue"),
   },
+  {
+    path: "/biangeng",
+    name: 'biangeng',
+    component: () => import("@/views/biangeng/index.vue")
+  }
 ];
 
 const router = createRouter({
