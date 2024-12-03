@@ -88,6 +88,7 @@ class editEntity {
       return {
         image: billboard.image || require("@/assets/cesium/location2.png"),
         scale: 2.0,
+        sizeInMeters: false, // 随着地图的方法而放大，缩小而缩小
         width: billboard.width || 30, // 图标的宽度
         height: billboard.height || 30, // 图标的高度
         depthTest: false, // 禁用深度测试

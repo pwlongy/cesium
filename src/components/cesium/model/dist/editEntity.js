@@ -75,6 +75,7 @@ var editEntity = /** @class */ (function () {
             return {
                 image: billboard.image || require("@/assets/cesium/location2.png"),
                 scale: 2.0,
+                sizeInMeters: false,
                 width: billboard.width || 30,
                 height: billboard.height || 30,
                 depthTest: false,
