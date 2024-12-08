@@ -35,12 +35,20 @@
    let cartogrographic = Cesium.cartogrophic.fromDegrees(lng, lat, alt)
 
    3. WGS84弧度坐标系与笛卡尔空间直角坐标系之间的转换
+   // 经纬度转笛卡尔坐标系（世界坐标系）
    let cartesian3 = Cesium.Cartesian3.fromDegrees(lng, lat, alt)
    没有高度
-   let cartesian3 = Cesium.Cartesian3.fromDegreesArray([lng, lat])
+   let cartesian3s = Cesium.Cartesian3.fromDegreesArray([lng, lat])
    有高度
-   let cartesian3 = Cesium.Cartesian3.fromDegreesArrayHeight([lng, lat, height])
-   
+   let cartesian3s = Cesium.Cartesian3.fromDegreesArrayHeight([lng, lat, height])
+
+   // 世界坐标系转WGS84坐标
+   let cartograpgic = Cesium.Ellipsoid.WGS84.cartesianToCartographic(cartesian3)
+   let cartograpgics = Cesium.Ellipsoid.WGS84.cartesianArrayToCartographicArray(cartesian3)
+
+   4. 世界坐标系转屏幕坐标系
+   let cartesian2 = Cesium.ScanneTransForms.wgs84ToWindowCoordinates(viewer.scene, cartesian3)
+   let position = viewer.scence.pickPosiotion(movement.position)
 
 
 */ 
