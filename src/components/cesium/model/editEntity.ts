@@ -49,11 +49,11 @@ class editEntity {
   getPoint(point: myObject):myObject {
     if(point && Object.keys(point)){
       return {
-        pixelSize: point.pixelSize || 30,
-        color: this.setColor(point.color) || Cesium.Color.RED,
+        pixelSize: point.pixelSize || 30, // 点位大小
+        color: this.setColor(point.color) || Cesium.Color.RED, // 颜色
         outlineColor:
-          this.setColor(point.outlineColor) || Cesium.Color.WHITE,
-        outlineWidth: point.outLineWidth || 2,
+          this.setColor(point.outlineColor) || Cesium.Color.WHITE, // 外边框颜色
+        outlineWidth: point.outLineWidth || 2, // 外边框宽度
       }
     }else {
       return {}
