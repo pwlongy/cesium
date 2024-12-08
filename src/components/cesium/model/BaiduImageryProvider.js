@@ -1,11 +1,12 @@
 
+import * as Cesium from "cesium";
 /*
   由于百度地图与cesium的瓦块切片规则不同，
   其中心点位于地理坐标的0,0点，多数地图的切片是以地图左上角为瓦块切片的起点。
   Cesium中默认的切片地图（UrlTemplateImageryProvider）包括经纬度模式和投影（墨卡托）模式都是以左上角切片为基准。
   所以当我们加载百度地图瓦块地图时，需要自定义地图影像地图类。
 */ 
-BaiduImageryProvider = function(options) {
+let BaiduImageryProvider = function(options) {
   this._errorEvent = new Cesium.Event();
   this._tileWidth = 256;
   this._tileHeight = 256;

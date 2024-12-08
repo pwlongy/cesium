@@ -11,6 +11,7 @@ const service = axios.create({
 // 请求拦截器
 service.interceptors.request.use(
     (config: InternalAxiosRequestConfig) => {
+      
       // 设置请求类型
       if (
           config.headers?.responseType === "blob" ||
@@ -18,6 +19,14 @@ service.interceptors.request.use(
       ) {
         config.responseType = config.headers.responseType;
       }
+
+      // Object.keys(config.headers).forEach(item => {
+      //   config[item] = config.headers[item]
+      // })
+
+      // 设置请求头数据
+      config.headers
+
       // 这里可以添加token等信息
       const token = localStorage.getItem("token");
       if (token) {

@@ -80,7 +80,7 @@ onMounted(() => {
   ]
   
   editEntity.creatDataSource('man')
-  editEntity.pointMove(pointList, 'man', 5, {})
+  // editEntity.pointMove(pointList, 'man', 5, {})
 
 
 

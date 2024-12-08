@@ -15,6 +15,11 @@ service.interceptors.request.use(function (config) {
         ((_b = config.headers) === null || _b === void 0 ? void 0 : _b.responseType) === "arraybuffer") {
         config.responseType = config.headers.responseType;
     }
+    // Object.keys(config.headers).forEach(item => {
+    //   config[item] = config.headers[item]
+    // })
+    // 设置请求头数据
+    config.headers;
     // 这里可以添加token等信息
     var token = localStorage.getItem("token");
     if (token) {

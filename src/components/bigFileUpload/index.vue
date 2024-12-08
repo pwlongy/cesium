@@ -4,9 +4,9 @@
       <h3>单一文件上传「FORM-DATA」</h3>
       <section class="upload_box" id="upload1">
         <!-- accept=".png" 限定上传文件的格式 -->
-        <input type="file" class="upload_inp" accept=".png,.jpg,.jpeg" />
+        <input type="file" class="upload_inp" @change="onFilesChange" accept=".png,.jpg,.jpeg" ref="inpUpload" />
         <div class="upload_button_box">
-          <button class="upload_button select">选择文件</button>
+          <button class="upload_button select" @click="selectFile">选择文件</button>
           <button class="upload_button upload">上传到服务器</button>
         </div>
         <div class="upload_tip">
@@ -84,11 +84,7 @@
         <input type="file" class="upload_inp" />
         <div class="upload_drag">
           <i class="icon"></i>
-          <span class="text"
-            >将文件拖到此处，或<a href="javascript:;" class="upload_submit"
-              >点击上传</a
-            ></span
-          >
+          <span class="text">将文件拖到此处，或<a href="javascript:;" class="upload_submit">点击上传</a></span>
         </div>
         <div class="upload_mark">正在上传中，请稍等...</div>
       </section>
@@ -112,7 +108,48 @@
 </template>
 
 <script setup lang="ts">
+
+import { ElMessage } from 'element-plus'
+import { ref } from "vue"
 // 单一文件上传
+let fileInput
+const inpUpload = ref(null)
+const selectFile = () => {
+  // 使用类型断言确保 TypeScript 知道这是个 HTMLInputElement
+  if (inpUpload.value) {
+    fileInput = inpUpload.value as HTMLInputElement;
+    if (fileInput) {
+      fileInput.click()
+    }
+  }
+}
+
+// 上传文件变化
+const selectedFiles = ref<File[]>([]);
+const onFilesChange = (event: Event) => {
+  const target = event.target as HTMLInputElement;
+  if (target.files) {
+    selectedFiles.value = Array.from(target.files);
+    // 限制文件上传类型
+    if(!/(png|jpg|jpge)/i.test(selectedFiles.value[0].type)){
+      ElMessage({
+        type: "error",
+        message: "文件上传类型只能是png、jpg、jpge",
+      })
+      return
+    }
+
+    // 限制文件上传大小
+    if(selectedFiles.value[0].size >= 2 * 1024 * 1024){
+      ElMessage({
+        type: "error",
+        message: "上传文件的大小不能超过2MB"
+      })
+    }
+  }
+}
+
+// 
 
 // 单一文件上传「BASE64」，只适合图片
 
@@ -125,10 +162,14 @@
 // 拖拽上传
 
 // 大文件上传
+
+
+
+
 </script>
 
 <style scoped lang="scss">
-.container{
+.container {
   display: flex;
   justify-content: space-around;
   margin-bottom: 30px;

@@ -12,13 +12,6 @@ var __assign = (this && this.__assign) || function () {
 };
 exports.__esModule = true;
 var Cesium = require("cesium");
-// declare module '@/components/cesium/model/BaiduImageryProvider' {
-//   export default class BaiduImageryProvider {
-//     // 在这里声明类和方法，根据需要补充具体类型
-//     constructor(options: any);
-//   }
-// }
-var BaiduImageryProvider_1 = require("@/components/cesium/model/BaiduImageryProvider");
 require("cesium/Build/CesiumUnminified/Widgets/widgets.css");
 Cesium.Ion.defaultAccessToken =
     "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI2MzgwYjJjNy1jY2EyLTQzMWQtYTU4NS1mN2JkMDBiMDY0OTkiLCJpZCI6MTgxOTA3LCJpYXQiOjE3MDE0MTU0NzN9.a2wL9Yz-cEomJ7aCjJo_5WlcE5oiQyOepObHkEYyeWw";
@@ -74,9 +67,9 @@ var initCesium = /** @class */ (function () {
         //   })
         // );
         // 百度地图引用底图
-        var baiduImageryProvider = new BaiduImageryProvider_1.BaiduImageryProvider({
-            url: "http://online{s}.map.bdimg.com/onlinelabel/?qt=tile&x={x}&y={y}&z={z}&styles=pl&scaler=1&p=1"
-        });
+        // let baiduImageryProvider = new BaiduImageryProvider({
+        //   url: "http://online{s}.map.bdimg.com/onlinelabel/?qt=tile&x={x}&y={y}&z={z}&styles=pl&scaler=1&p=1"
+        // });
         // 添加点击事件
         this.bindClick();
         // this.setCamerPosition({x: -2392480.60956927, y: 5127431.693189062, z: 2934902.146746033}, {x: -2392609.893707916, y: 5127106.880787394, z: 2934661.692260771})
@@ -97,6 +90,18 @@ var initCesium = /** @class */ (function () {
         // 绑定鼠标点击事件
         handler.setInputAction(function (e) {
             var _a;
+            console.log("屏幕坐标：" + e.position);
+            // 屏幕坐标转笛卡尔世界坐标
+            var rany = _this.viewer.camera.getPickRay(e.position);
+            if (rany) {
+                var cartesian3 = _this.viewer.scene.globe.pick(rany, _this.viewer.scene);
+                console.log("世界坐标： " + cartesian3);
+                if (!cartesian3)
+                    return;
+                // 世界坐标转弧度坐标
+                var cartograpgic = Cesium.Ellipsoid.WGS84.cartesianToCartographic(cartesian3);
+                console.log("WGS84坐标系:" + cartograpgic);
+            }
             // 获取点击的经纬度
             var position = _this.viewer.scene.pickPosition(e.position);
             if (Cesium.defined(position)) {

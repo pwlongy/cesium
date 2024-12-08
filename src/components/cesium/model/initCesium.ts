@@ -1,11 +1,6 @@
 import * as Cesium from "cesium";
-// declare module '@/components/cesium/model/BaiduImageryProvider' {
-//   export default class BaiduImageryProvider {
-//     // 在这里声明类和方法，根据需要补充具体类型
-//     constructor(options: any);
-//   }
-// }
-import {BaiduImageryProvider} from '@/components/cesium/model/BaiduImageryProvider'
+
+import {BaiduImageryProvider} from '@/components/cesium/model/BaiduImageryProvider.js'
 import "cesium/Build/CesiumUnminified/Widgets/widgets.css";
 Cesium.Ion.defaultAccessToken =
   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI2MzgwYjJjNy1jY2EyLTQzMWQtYTU4NS1mN2JkMDBiMDY0OTkiLCJpZCI6MTgxOTA3LCJpYXQiOjE3MDE0MTU0NzN9.a2wL9Yz-cEomJ7aCjJo_5WlcE5oiQyOepObHkEYyeWw";
@@ -97,9 +92,9 @@ class initCesium {
     // );
 
     // 百度地图引用底图
-    let baiduImageryProvider = new BaiduImageryProvider({
-      url: "http://online{s}.map.bdimg.com/onlinelabel/?qt=tile&x={x}&y={y}&z={z}&styles=pl&scaler=1&p=1"
-    });
+    // let baiduImageryProvider = new BaiduImageryProvider({
+    //   url: "http://online{s}.map.bdimg.com/onlinelabel/?qt=tile&x={x}&y={y}&z={z}&styles=pl&scaler=1&p=1"
+    // });
 
     // 添加点击事件
     this.bindClick()
@@ -121,6 +116,17 @@ class initCesium {
     );
     // 绑定鼠标点击事件
     handler.setInputAction((e:Cesium.ScreenSpaceEventHandler.PositionedEvent):void => {
+      console.log("屏幕坐标："+ e.position)
+      // 屏幕坐标转笛卡尔世界坐标
+      let rany = this.viewer.camera.getPickRay(e.position)
+      if(rany) {
+        let cartesian3 = this.viewer.scene.globe.pick(rany, this.viewer.scene)
+        console.log("世界坐标： "+ cartesian3)
+        if(!cartesian3) return
+        // 世界坐标转弧度坐标
+        let cartograpgic = Cesium.Ellipsoid.WGS84.cartesianToCartographic(cartesian3)
+        console.log("WGS84坐标系:" + cartograpgic)
+      }
       // 获取点击的经纬度
       const position = this.viewer.scene.pickPosition(e.position);
       if (Cesium.defined(position)) {

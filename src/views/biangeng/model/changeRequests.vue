@@ -49,7 +49,8 @@
 </template>
 
 <script setup lang="ts">
-import { reactive, ref } from 'vue'
+
+import {defineExpose, reactive, ref } from 'vue'
 import type { ComponentSize, FormInstance, FormRules } from 'element-plus'
 interface RuleForm {
   id: string,
@@ -95,6 +96,11 @@ const options = [
     label: 'Option5',
   },
 ]
+
+// 将数据直接暴露出去，父组件可以直接获取
+defineExpose({
+  ruleForm
+})
 </script>
 
 <style lang="scss" scoped>

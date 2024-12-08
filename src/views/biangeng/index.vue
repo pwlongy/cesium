@@ -17,7 +17,7 @@
       </el-steps>
     </div>
 
-    <ChengeRequests ref="ChengeRequests"></ChengeRequests>
+    <ChengeRequests ref="chengeRequests"></ChengeRequests>
 
   </div>
 
@@ -29,15 +29,13 @@ import {onMounted} from "vue";
 // 步骤条
 import { ref } from 'vue'
 const active = ref(0)
-const next = () => {
-  if (active.value++ > 2) active.value = 0
-}
+
 
 // 获取发起变更数据
 onMounted(() => {
-  console.log(ChengeRequests.value)
+  console.log(chengeRequests.value)
 })
-const ChengeRequests = ref(null)
+const chengeRequests = ref(null)
 
 </script>
 

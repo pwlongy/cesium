@@ -5,7 +5,7 @@ import bigFileUpload from "@/components/bigFileUpload/index.vue"
 const routes: Array<RouteRecordRaw> = [
   {
     path: "/",
-    redirect: "/biangeng"
+    redirect: "/cesium"
   },
   {
     path: "/cesium",
