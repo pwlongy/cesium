@@ -9,6 +9,9 @@ import {
   myObject,
 } from './model/interfaceBox/interfaceList'
 import { onMounted } from "vue";
+
+// 设置所有统一管理的数据源
+const dataSource = ["points", "polylines", "polygons"]
 // 用于保存实体集合对象的列表
 onMounted(() => {
   let options = {
@@ -24,10 +27,13 @@ onMounted(() => {
   //   outlineColor: "red",
   // })
 
-  // 添加点位
   const editEntity = new initCesium.EditEntity(viewer.viewer)
+
+
   // 统一管理实体
-  editEntity.creatDataSource('test')
+  dataSource.forEach(item => {
+    editEntity.creatDataSource(item)
+  })
   // 添加点位
   const params = {
     data: {
@@ -44,8 +50,26 @@ onMounted(() => {
     //   Offsety: 0
     // }
   }
-  editEntity.addPoint(115.01221108836832, 27.581318249016455, params, 'test')
+  editEntity.addPoint(115.01221108836832, 27.581318249016455, params, 'points')
 
+  // 添加线
+  let linePoint = [
+    [115.01221108836832, 27.581318249016455],
+    [115.21221108836832, 27.581318249016455],
+    [115.31221108836832, 27.581318249016455],
+    [115.41221108836832, 27.581318249016455],
+    [115.51221108836832, 27.581318249016455],
+  ]
+  editEntity.addPolyline(linePoint, {}, "polygon")
+  // 添加面
+  let polygonPoint = [
+  115.01221108836832, 27.981318249016455,
+  115.11221108836832, 27.571318249016455,
+  115.561221108836832, 27.681318249016455,
+  115.96221108836832, 27.5891318249016455,
+  115.91221108836832, 27.681318249016455
+  ]
+  editEntity.addPolygon(polygonPoint, {}, "polygons")
 
   // 添加轨迹移动
   // 绘制线条
@@ -78,7 +102,7 @@ onMounted(() => {
       id: 2
     },
   ]
-  
+
   editEntity.creatDataSource('man')
   // editEntity.pointMove(pointList, 'man', 5, {})
 
@@ -106,13 +130,13 @@ onMounted(() => {
 
   }
   let timeObj = editEntity.linePlay(lineData, 5, Lineparams, 'ManageLine')
-  if(timeObj && Object.keys(timeObj)){
+  if (timeObj && Object.keys(timeObj)) {
     editEntity.playclock(timeObj.startTime, timeObj.stopTime)
   }
 });
 
 // 设置点击实体
-let clickPoint= (data: myObject):void =>{
+let clickPoint = (data: myObject): void => {
   console.log(121111111, data)
 }
 
