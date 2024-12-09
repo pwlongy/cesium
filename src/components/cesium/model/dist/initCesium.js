@@ -117,6 +117,18 @@ var initCesium = /** @class */ (function () {
             }
         }, Cesium.ScreenSpaceEventType.LEFT_CLICK);
     };
+    // 添加3dtitle 斜切摄影
+    initCesium.prototype.set3dTitles = function (url) {
+        // try{
+        //   let tileset = new Cesium.Cesium3DTileset({
+        //     url: url,
+        //     maximumScreenSpaceError: 16, // 这个数据越大在里的很远的时候模糊，越近越清晰
+        //   });
+        //   this.viewer.scene.primitives.add(tileset)
+        //   this.viewer.zoomTo(tileset)
+        // }catch(err) {
+        // }
+    };
     // 获取相机位置
     initCesium.prototype.getCameraPosition = function () {
         var camera = this.viewer.camera;
