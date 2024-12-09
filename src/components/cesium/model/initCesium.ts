@@ -61,40 +61,40 @@ class initCesium {
   initMap(): void {
     this.viewer = new Cesium.Viewer(this.boxName, this.options);
     // 加载影像地图
-    // this.viewer.imageryLayers.addImageryProvider(
-    //   new Cesium.WebMapTileServiceImageryProvider({
-    //     url:
-    //       "http://t{s}.tianditu.com/img_w/wmts?service=wmts&request=GetTile&version=1.0.0&LAYER=img&tileMatrixSet=w&TileMatrix={TileMatrix}&TileRow={TileRow}&TileCol={TileCol}&style=default&format=tiles&tk=" +
-    //       "38ff10ec6e54ac30476a21a6bbf61fe4",
-    //     subdomains: subdomains,
-    //     layer: "tdtImgLayer",
-    //     style: "default",
-    //     format: "image/jpeg",
-    //     maximumLevel: 18,
-    //     tileMatrixSetID: "GoogleMapsCompatible", // 使用谷歌的瓦片切片方式
-    //     // show: true,
-    //   })
-    // );
-    // // 加载矢量底图
-    // this.viewer.imageryLayers.addImageryProvider(
-    //   new Cesium.WebMapTileServiceImageryProvider({
-    //     // 影像注记
-    //     url:
-    //       "http://t{s}.tianditu.com/cia_w/wmts?service=wmts&request=GetTile&version=1.0.0&LAYER=cia&tileMatrixSet=w&TileMatrix={TileMatrix}&TileRow={TileRow}&TileCol={TileCol}&style=default.jpg&tk=" +
-    //       "38ff10ec6e54ac30476a21a6bbf61fe4",
-    //     subdomains: subdomains,
-    //     layer: "tdtCiaLayer",
-    //     style: "default",
-    //     format: "image/jpeg",
-    //     tileMatrixSetID: "GoogleMapsCompatible",
-    //     // show: true,
-    //   })
-    // );
+    this.viewer.imageryLayers.addImageryProvider(
+      new Cesium.WebMapTileServiceImageryProvider({
+        url:
+          "http://t{s}.tianditu.com/img_w/wmts?service=wmts&request=GetTile&version=1.0.0&LAYER=img&tileMatrixSet=w&TileMatrix={TileMatrix}&TileRow={TileRow}&TileCol={TileCol}&style=default&format=tiles&tk=" +
+          "38ff10ec6e54ac30476a21a6bbf61fe4",
+        subdomains: subdomains, // 添加负载子域加载速度会提高
+        layer: "tdtImgLayer",
+        style: "default",
+        format: "image/jpeg",
+        maximumLevel: 18,
+        tileMatrixSetID: "GoogleMapsCompatible", // 使用谷歌的瓦片切片方式
+        // show: true,
+      })
+    );
+    // 加载矢量底图
+    this.viewer.imageryLayers.addImageryProvider(
+      new Cesium.WebMapTileServiceImageryProvider({
+        // 影像注记
+        url:
+          "http://t{s}.tianditu.com/cia_w/wmts?service=wmts&request=GetTile&version=1.0.0&LAYER=cia&tileMatrixSet=w&TileMatrix={TileMatrix}&TileRow={TileRow}&TileCol={TileCol}&style=default.jpg&tk=" +
+          "38ff10ec6e54ac30476a21a6bbf61fe4",
+        subdomains: subdomains,
+        layer: "tdtCiaLayer",
+        style: "default",
+        format: "image/jpeg",
+        tileMatrixSetID: "GoogleMapsCompatible",
+        // show: true,
+      })
+    );
 
     // 百度地图引用底图
-    // let baiduImageryProvider = new BaiduImageryProvider({
-    //   url: "http://online{s}.map.bdimg.com/onlinelabel/?qt=tile&x={x}&y={y}&z={z}&styles=pl&scaler=1&p=1"
-    // });
+    let baiduImageryProvider = new BaiduImageryProvider({
+      url: "http://shangetu{s}.map.bdimg.com/it/u=x={x};y={y};z={z};v=009;type=sate&fm=46"
+    });
 
     // 添加点击事件
     this.bindClick()
