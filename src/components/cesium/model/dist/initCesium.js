@@ -12,7 +12,6 @@ var __assign = (this && this.__assign) || function () {
 };
 exports.__esModule = true;
 var Cesium = require("cesium");
-var BaiduImageryProvider_js_1 = require("@/components/cesium/model/BaiduImageryProvider.js");
 require("cesium/Build/CesiumUnminified/Widgets/widgets.css");
 Cesium.Ion.defaultAccessToken =
     "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI2MzgwYjJjNy1jY2EyLTQzMWQtYTU4NS1mN2JkMDBiMDY0OTkiLCJpZCI6MTgxOTA3LCJpYXQiOjE3MDE0MTU0NzN9.a2wL9Yz-cEomJ7aCjJo_5WlcE5oiQyOepObHkEYyeWw";
@@ -60,9 +59,9 @@ var initCesium = /** @class */ (function () {
             tileMatrixSetID: "GoogleMapsCompatible"
         }));
         // 百度地图引用底图
-        var baiduImageryProvider = new BaiduImageryProvider_js_1.BaiduImageryProvider({
-            url: "http://shangetu{s}.map.bdimg.com/it/u=x={x};y={y};z={z};v=009;type=sate&fm=46"
-        });
+        // let baiduImageryProvider = new BaiduImageryProvider({
+        //   url: "http://shangetu{s}.map.bdimg.com/it/u=x={x};y={y};z={z};v=009;type=sate&fm=46"
+        // });
         // 添加点击事件
         this.bindClick();
         // this.setCamerPosition({x: -2392480.60956927, y: 5127431.693189062, z: 2934902.146746033}, {x: -2392609.893707916, y: 5127106.880787394, z: 2934661.692260771})
@@ -118,16 +117,40 @@ var initCesium = /** @class */ (function () {
         }, Cesium.ScreenSpaceEventType.LEFT_CLICK);
     };
     // 添加3dtitle 斜切摄影
-    initCesium.prototype.set3dTitles = function (url) {
-        // try{
-        //   let tileset = new Cesium.Cesium3DTileset({
-        //     url: url,
-        //     maximumScreenSpaceError: 16, // 这个数据越大在里的很远的时候模糊，越近越清晰
-        //   });
-        //   this.viewer.scene.primitives.add(tileset)
-        //   this.viewer.zoomTo(tileset)
-        // }catch(err) {
-        // }
+    // set3dTitles(url:string) {
+    //   try{
+    //     let tileset = new Cesium.Cesium3DTileset({
+    //       url: url,
+    //       maximumScreenSpaceError: 16, // 这个数据越大在里的很远的时候模糊，越近越清晰
+    //     });
+    //     this.viewer.scene.primitives.add(tileset)
+    //     this.viewer.zoomTo(tileset)
+    //   }catch(err) {
+    //   }
+    // }
+    // 添加三维模型
+    initCesium.prototype.addentityGltf = function (modelPosition, url) {
+        var position = Cesium.Cartesian3.fromDegrees(modelPosition.lng, modelPosition.lat, modelPosition.height);
+        // 设置模型方向
+        var hpRoll = new Cesium.HeadingPitchRoll(Cesium.Math.toRadians(0), 0, 0); // 弧度
+        var orientation = Cesium.Transforms.headingPitchRollQuaternion(position, hpRoll);
+        var model = this.viewer.entities.add({
+            id: 'model',
+            position: position,
+            // 模型方向
+            // orientation: orientation,
+            model: {
+                // 模型地址
+                uri: url,
+                // 模型是否可见
+                colorBlendMode: Cesium.ColorBlendMode.MIX,
+                color: Cesium.Color.RED,
+                // 设置轮廓
+                silhouetteColor: Cesium.Color.BLUE,
+                silhouetteSize: 5
+            }
+        });
+        this.viewer.zoomTo(model);
     };
     // 获取相机位置
     initCesium.prototype.getCameraPosition = function () {

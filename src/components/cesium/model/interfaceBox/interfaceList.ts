@@ -84,6 +84,12 @@ interface timeObj{
   startTime: Date,
   stopTime: Date
 }
+
+interface modelPosition {
+  lng: number,
+  lat: number,
+  height?: number
+}
 export {
   Options,
   entitiesObj,
@@ -94,5 +100,6 @@ export {
   dataSourceList,
   timeObj,
   myProperty,
-  cameraObj
+  cameraObj,
+  modelPosition
 }

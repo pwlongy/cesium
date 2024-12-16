@@ -11,7 +11,8 @@ import {
   myObject,
   pointFace,
   pointObj,
-  position
+  position,
+  modelPosition
 } from './interfaceBox/interfaceList'
 const subdomains: string[] = ["0", "1", "2", "3", "4", "5", "6", "7"];
 
@@ -92,9 +93,9 @@ class initCesium {
     );
 
     // 百度地图引用底图
-    let baiduImageryProvider = new BaiduImageryProvider({
-      url: "http://shangetu{s}.map.bdimg.com/it/u=x={x};y={y};z={z};v=009;type=sate&fm=46"
-    });
+    // let baiduImageryProvider = new BaiduImageryProvider({
+    //   url: "http://shangetu{s}.map.bdimg.com/it/u=x={x};y={y};z={z};v=009;type=sate&fm=46"
+    // });
 
     // 添加点击事件
     this.bindClick()
@@ -150,18 +151,44 @@ class initCesium {
     }, Cesium.ScreenSpaceEventType.LEFT_CLICK); 
   }
   // 添加3dtitle 斜切摄影
-  set3dTitles(url:string) {
-    // try{
-    //   let tileset = new Cesium.Cesium3DTileset({
-    //     url: url,
-    //     maximumScreenSpaceError: 16, // 这个数据越大在里的很远的时候模糊，越近越清晰
-    //   });
-    //   this.viewer.scene.primitives.add(tileset)
-    //   this.viewer.zoomTo(tileset)
-    // }catch(err) {
+  // set3dTitles(url:string) {
+  //   try{
+  //     let tileset = new Cesium.Cesium3DTileset({
+  //       url: url,
+  //       maximumScreenSpaceError: 16, // 这个数据越大在里的很远的时候模糊，越近越清晰
+  //     });
+  //     this.viewer.scene.primitives.add(tileset)
+  //     this.viewer.zoomTo(tileset)
+  //   }catch(err) {
 
-    // }
+  //   }
 
+  // }
+
+  // 添加三维模型
+  addentityGltf(modelPosition: modelPosition, url: string) {
+    const position = Cesium.Cartesian3.fromDegrees(modelPosition.lng, modelPosition.lat, modelPosition.height)
+    // 设置模型方向
+    let hpRoll = new Cesium.HeadingPitchRoll(Cesium.Math.toRadians(0), 0, 0) // 弧度
+    let orientation = Cesium.Transforms.headingPitchRollQuaternion(position, hpRoll)
+    let model = this.viewer.entities.add({
+      id: 'model',
+      position,
+      // 模型方向
+      // orientation: orientation,
+      model: {
+        // 模型地址
+        uri: url,
+        // 模型是否可见
+        colorBlendMode: Cesium.ColorBlendMode.MIX,
+        color: Cesium.Color.RED, // 设置颜色
+        // 设置轮廓
+        silhouetteColor: Cesium.Color.BLUE, // 轮廓颜色
+        silhouetteSize: 5, //轮廓线条宽度
+      }
+    })
+
+    this.viewer.zoomTo(model)
   }
 
 

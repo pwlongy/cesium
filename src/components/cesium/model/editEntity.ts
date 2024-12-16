@@ -39,6 +39,7 @@ class editEntity {
       // description: options.data,
       point: this.getPoint(options.point),
       properties: {
+        
         data: options.data,
       },
       label: this.getPointLabel(options.label),
@@ -140,7 +141,7 @@ class editEntity {
       name: options.name || "Red line",
       polyline: {
         positions: Cesium.Cartesian3.fromDegreesArray(lineList.flat()),
-        width: options.width || 5,
+        width: options.width || 1,
         material: this.setColor(options.color) || Cesium.Color.RED,
       },
     });
@@ -218,7 +219,7 @@ class editEntity {
           glowPower: 0.1,
           color: Cesium.Color.GREEN,
         }),
-        width: 30,
+        width: 5,
       },
     });
 
