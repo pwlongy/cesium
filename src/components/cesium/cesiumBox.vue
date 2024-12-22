@@ -127,11 +127,13 @@ onMounted(() => {
 
 
   let Lineparams = {
-
+    modelObj: {
+      scale: 1
+    }
   }
   let timeObj = editEntity.linePlay(lineData, 5, Lineparams, 'ManageLine')
   if (timeObj && Object.keys(timeObj)) {
-    editEntity.playclock(timeObj.startTime, timeObj.stopTime)
+    editEntity.playclock(timeObj.startTime, timeObj.stopTime, timeObj.entitidd)
   }
 });
 

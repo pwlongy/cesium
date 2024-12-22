@@ -82,7 +82,8 @@ interface dataSourceList{
 
 interface timeObj{
   startTime: Date,
-  stopTime: Date
+  stopTime: Date,
+  entitidd: Cesium.Entity
 }
 
 interface modelPosition {

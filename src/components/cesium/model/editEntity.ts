@@ -165,7 +165,7 @@ class editEntity {
   }
 
   // 绘制轨迹回放功能
-  linePlay(lineList: number[][] = [], timeSpace: number, options = {}, dataSourceName: string): timeObj | undefined {
+  linePlay(lineList: number[][] = [], timeSpace: number, options:myObject = {}, dataSourceName: string): timeObj | undefined {
     // 判断数据是否存在
     if (!lineList.length) {
       console.log("轨迹路线为必传项")
@@ -205,6 +205,9 @@ class editEntity {
           stop: Cesium.JulianDate.fromDate(stopTime),
         }),
       ]),
+      model: this.getModel(options.modelObj),
+      // 朝向
+      orientation: new Cesium.VelocityOrientationProperty(property),
       position: property,
       billboard: {
         image: require("@/assets/image/icon/videoPoint.png"),
@@ -223,14 +226,35 @@ class editEntity {
       },
     });
 
+    // 镜头是否需要跟随目标移动
+    // this.viewer.trackedEntity = entitidd
+
     return {
       startTime: startTime,
-      stopTime: stopTime
+      stopTime: stopTime,
+      entitidd: entitidd
+    }
+  }
+
+  // 返回模型数据
+  getModel(modelObj: myObject) {
+    if(!Object.keys(modelObj).length) return {}
+    
+    return {
+      url: modelObj.url || require("@/assets/data/Airplane.glb"),
+      scale: modelObj.scale || 1,
+      minimumPixelSize: modelObj.minimumPixelSize || 70,
+      maximumScale: modelObj.maximumScale || 70
     }
   }
 
   // 播放时间轴
-  playclock(startTime: Date, stopTime: Date) {
+  playclock(startTime: Date, stopTime: Date, entity: Cesium.Entity) {
+    this.viewer.clock.onTick.addEventListener(tick => {
+      entity.position?.getValue(tick.currentTime)
+    })
+
+
     this.viewer.clock.currentTime = Cesium.JulianDate.fromDate(startTime) // 修改时间轴为当前时间
     this.viewer.clock.stopTime = Cesium.JulianDate.fromDate(stopTime);
     this.viewer.clock.clockRange = Cesium.ClockRange.LOOP_STOP; // 只执行一遍

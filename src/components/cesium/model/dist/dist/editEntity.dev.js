@@ -151,7 +151,7 @@ function () {
       name: options.name || "Red line",
       polyline: {
         positions: Cesium.Cartesian3.fromDegreesArray(lineList.flat()),
-        width: options.width || 5,
+        width: options.width || 1,
         material: this.setColor(options.color) || Cesium.Color.RED
       }
     });
@@ -226,13 +226,16 @@ function () {
         start: Cesium.JulianDate.fromDate(startTime),
         stop: Cesium.JulianDate.fromDate(stopTime)
       })]),
+      model: this.getModel(options.modelObj),
+      // 朝向
+      orientation: new Cesium.VelocityOrientationProperty(property),
       position: property,
-      billboard: {
-        image: require("@/assets/image/icon/videoPoint.png"),
-        scale: 0.5,
-        pixelOffset: new Cesium.Cartesian2(0, -20),
-        heightReference: Cesium.HeightReference.CLAMP_TO_GROUND
-      },
+      // billboard: {
+      //   image: require("@/assets/image/icon/videoPoint.png"),
+      //   scale: 0.5,
+      //   pixelOffset: new Cesium.Cartesian2(0, -20),
+      //   heightReference: Cesium.HeightReference.CLAMP_TO_GROUND,
+      // },
       path: {
         leadTime: 0,
         resolution: 1,
@@ -240,12 +243,23 @@ function () {
           glowPower: 0.1,
           color: Cesium.Color.GREEN
         }),
-        width: 30
+        width: 5
       }
     });
     return {
       startTime: startTime,
       stopTime: stopTime
+    };
+  }; // 返回模型数据
+
+
+  editEntity.prototype.getModel = function (modelObj) {
+    if (!Object.keys(modelObj).length) return {};
+    return {
+      uri: modelObj.url || require("@/assets/data/Airplane.glb"),
+      scale: modelObj.scale || 1,
+      minimumPixelSize: modelObj.minimumPixelSize || 70,
+      maximumScale: modelObj.maximumScale || 70
     };
   }; // 播放时间轴
 
