@@ -16,12 +16,12 @@
           </el-form-item>
         </el-col>
         <el-col :span="6">
-          <el-form-item label="变更发起人" prop="id">
+          <el-form-item label="变更发起人" prop="name">
             <el-input v-model="ruleForm.name" />
           </el-form-item>
         </el-col>
         <el-col :span="12">
-          <el-form-item label="申请单位" prop="id">
+          <el-form-item label="申请单位" prop="unit">
             <el-select v-model="ruleForm.unit" placeholder="Select">
               <el-option
                   v-for="item in options"
@@ -36,11 +36,31 @@
 
       <el-row :gutter="20">
         <el-col :span="12">
+          <el-form-item label="变更名称" prop="changeName">
+            <el-input v-model="ruleForm.changeName" />
+          </el-form-item>
         </el-col>
         <el-col :span="6">
+          <el-form-item label="发起日期" prop="InitiateTime">
+            <el-date-picker
+                v-model="ruleForm.InitiateTime"
+                type="date"
+                :default-time="new Date()"
+                :size="size"
+                :disabled-date="disabledDate"
+            />
+          </el-form-item>
+        </el-col>
+        <el-col :span="6">
+          <el-form-item label="计划投用日期" prop="CommissioningTime">
+            <el-date-picker
+                v-model="ruleForm.CommissioningTime"
+                type="date"
+                :size="size"
+                :default-time="new Date()"
 
-        </el-col>
-        <el-col :span="6">
+            />
+          </el-form-item>
         </el-col>
       </el-row>
 
@@ -50,19 +70,29 @@
 
 <script setup lang="ts">
 
-import {defineExpose, reactive, ref } from 'vue'
+import { reactive, ref } from 'vue'
 import type { ComponentSize, FormInstance, FormRules } from 'element-plus'
 interface RuleForm {
   id: string,
   name: string,
   unit: string,
   changeName: string,
+  InitiateTime: string,
+  CommissioningTime: string
 }
+
+// 时间选择区域
+const disabledDate = (time: Date) => {
+  return time.getTime() < new Date().getTime()
+}
+
 const ruleForm = reactive<RuleForm>({
   id: '',
   name: '',
   unit: '',
   changeName: '',
+  InitiateTime: '',
+  CommissioningTime: ''
 })
 
 const rules = reactive<FormRules<RuleForm>>({
@@ -77,19 +107,6 @@ const options = [
   {
     value: 'Option1',
     label: 'Option1',
-  },
-  {
-    value: 'Option2',
-    label: 'Option2',
-    disabled: true,
-  },
-  {
-    value: 'Option3',
-    label: 'Option3',
-  },
-  {
-    value: 'Option4',
-    label: 'Option4',
   },
   {
     value: 'Option5',

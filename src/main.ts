@@ -5,6 +5,7 @@ import store from './store'
 // 将所有common文件中导出的方法挂载到全局中
 import func from '@/utils/common/common'
 import '@/utils/rem.js'
+import {formatDate} from '@/utils'
 
 import qs from 'qs'
 import SparkMD5 from 'spark-md5'
@@ -14,6 +15,7 @@ const app = createApp(App)
 app.config.globalProperties.$func = func
 app.config.globalProperties.$qs = qs
 app.config.globalProperties.$sparkMd5 = SparkMD5
+app.config.globalProperties.$formatDate = formatDate
 
 
 
