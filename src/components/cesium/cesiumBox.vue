@@ -75,6 +75,17 @@ onMounted(() => {
   // 绘制线条
   editEntity.creatDataSource('ManageLine')
 
+
+  // 添加模型文件
+  let modelPosition = {
+    lng: 115.01221108836832,
+    lat: 27.581318249016455,
+    height: 200,
+  }
+  let url = "/data/fly/scene.gltf"
+  viewer.addentityGltf(modelPosition, url)
+
+
   // 点位实时移动
   let pointList = [
     {

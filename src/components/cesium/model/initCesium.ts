@@ -177,6 +177,7 @@ class initCesium {
       // 模型方向
       // orientation: orientation,
       model: {
+        show: true,
         // 模型地址
         uri: url,
         // 模型是否可见
@@ -184,7 +185,7 @@ class initCesium {
         color: Cesium.Color.RED, // 设置颜色
         // 设置轮廓
         silhouetteColor: Cesium.Color.BLUE, // 轮廓颜色
-        silhouetteSize: 5, //轮廓线条宽度
+        silhouetteSize: 0, //轮廓线条宽度
       }
     })
 
