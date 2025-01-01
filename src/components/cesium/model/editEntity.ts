@@ -256,18 +256,12 @@ class editEntity {
   }
 
   // 添加平面的图元集合
-  addPolygonPrimitives() {
+  addPolygonPrimitives(positionList: number[],) {
     // 添加平面数据
     let instance = new Cesium.GeometryInstance({  // 图元对象
       geometry : new Cesium.PolygonGeometry({  // 平面图元
         polygonHierarchy : new Cesium.PolygonHierarchy(
-            Cesium.Cartesian3.fromDegreesArray([
-              -72.0, 40.0,
-              -70.0, 35.0,
-              -75.0, 30.0,
-              -70.0, 30.0,
-              -68.0, 40.0
-            ])
+            Cesium.Cartesian3.fromDegreesArray(positionList)
         )
       })
     });

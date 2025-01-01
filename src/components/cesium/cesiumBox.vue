@@ -168,7 +168,14 @@ onMounted(() => {
 
 
   // 添加平面图元集合
-  editEntity.addPolygonPrimitives()
+  let list = [
+    -72.0, 40.0,
+    -70.0, 35.0,
+    -75.0, 30.0,
+    -70.0, 30.0,
+    -68.0, 40.0
+  ]
+  editEntity.addPolygonPrimitives(list)
 });
 
 // 设置点击实体
