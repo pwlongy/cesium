@@ -9,6 +9,7 @@ import {
   myObject,
 } from './model/interfaceBox/interfaceList'
 import { onMounted } from "vue";
+import editEntity from "@/components/cesium/model/editEntity";
 
 // 设置所有统一管理的数据源
 const dataSource = ["points", "polylines", "polygons"]
@@ -28,6 +29,7 @@ onMounted(() => {
   // })
 
   const editEntity = new initCesium.EditEntity(viewer.viewer)
+  console.log(editEntity, 99999)
 
 
   // 统一管理实体
@@ -83,7 +85,7 @@ onMounted(() => {
     height: 200,
   }
   let url = "/data/fly/scene.gltf"
-  viewer.addentityGltf(modelPosition, url)
+  // viewer.addentityGltf(modelPosition, url)
 
 
   // 点位实时移动
@@ -146,12 +148,35 @@ onMounted(() => {
   if (timeObj && Object.keys(timeObj)) {
     editEntity.playclock(timeObj.startTime, timeObj.stopTime, timeObj.entitidd)
   }
+
+
+
+
+// 添加点位图元数据集合
+  let position = {
+    lng: -72.69,
+    lat: 40.23,
+    height: 0
+  }
+  let paramsObj = {
+    color: "blue",
+    outlineColor: "red",
+    outlineWidth: 5
+  }
+  let points = editEntity.addPointPrimitives(position, paramsObj)
+  console.log(points.get(0), 111111)
+
+
+  // 添加平面图元集合
+  editEntity.addPolygonPrimitives()
 });
 
 // 设置点击实体
 let clickPoint = (data: myObject): void => {
   console.log(121111111, data)
 }
+
+
 
 
 

@@ -5,18 +5,21 @@ import {
   dataSourceList,
   timeObj,
   myProperty,
-  cameraObj
+  cameraObj, modelPosition
 } from './interfaceBox/interfaceList'
 class editEntity {
   viewer: Cesium.Viewer
   dataSource: dataSourceList
   manListproperty: myProperty
+  ObjPrimitives: myObject
   constructor(viewer: Cesium.Viewer) {
     this.viewer = viewer;
     // 统一管理实体资源
     this.dataSource = {};
     
     this.manListproperty = {};
+    // 管理图元数据
+    this.ObjPrimitives = {}
   }
 
   // 处理自定义颜色
@@ -84,7 +87,6 @@ class editEntity {
 
   // 点位图标
   getBillboard(billboard: myObject): myObject {
-    console.log(billboard, 2222);
     if (billboard && Object.keys(billboard).length) {
       return {
         image: billboard.image || require("@/assets/cesium/location2.png"),
@@ -164,11 +166,11 @@ class editEntity {
     });
   }
 
-  // 绘制轨迹回放功能
+  // 绘制路劲回放
   linePlay(lineList: number[][] = [], timeSpace: number, options:myObject = {}, dataSourceName: string): timeObj | undefined {
     // 判断数据是否存在
     if (!lineList.length) {
-      console.log("轨迹路线为必传项")
+      console.log("路径路线为必传项")
       return
     }
     // 判断数据源是否存在
@@ -180,7 +182,7 @@ class editEntity {
     let stopTime: Date = startTime
     const startTimeStamp: number = startTime.getTime()
 
-    // 先添加一条原有轨迹
+    // 先添加一条原有路径
     this.addPolyline(lineList, {}, 'ManageLine')
 
     // 添加每一个时间段的位置
@@ -193,11 +195,11 @@ class editEntity {
 
     // 使用插值算法 使得移动的时候平滑过渡
     property.setInterpolationOptions({
-      interpolationDegree: 0.01,
+      interpolationDegree: 0.001,
       interpolationAlgorithm: Cesium.LagrangePolynomialApproximation,
     });
 
-    // 添加轨迹
+    // 添加路径
     const entitidd: Cesium.Entity = viewer.entities.add({
       availability: new Cesium.TimeIntervalCollection([
         new Cesium.TimeInterval({
@@ -236,15 +238,76 @@ class editEntity {
     }
   }
 
+
+  // 添加大量点位（图元数据）
+
+
+  // 添加点位图元集合
+  addPointPrimitives(position:modelPosition, params:myObject ) {
+    const points = this.viewer.scene.primitives.add(new Cesium.PointPrimitiveCollection())
+    points.add({
+      position: Cesium.Cartesian3.fromDegrees(position.lng, position.lat, position.height || 0), // 经纬度信息
+      color: this.setColor(params.color || 'blue'), // 点位颜色
+      outlineColor: this.setColor(params.outlineColor || 'red'), // 外边框颜色
+      outlineWidth: params.outlineWidth || 5,
+      pixelSize: params.pixelSize || 10, // 设置点的大小
+    })
+    return points
+  }
+
+  // 添加平面的图元集合
+  addPolygonPrimitives() {
+    // 添加平面数据
+    let instance = new Cesium.GeometryInstance({  // 图元对象
+      geometry : new Cesium.PolygonGeometry({  // 平面图元
+        polygonHierarchy : new Cesium.PolygonHierarchy(
+            Cesium.Cartesian3.fromDegreesArray([
+              -72.0, 40.0,
+              -70.0, 35.0,
+              -75.0, 30.0,
+              -70.0, 30.0,
+              -68.0, 40.0
+            ])
+        )
+      })
+    });
+    this.viewer.scene.primitives.add(new Cesium.Primitive({
+      geometryInstances : instance,
+      appearance : new Cesium.EllipsoidSurfaceAppearance({
+        material : new Cesium.Material({  // 材质
+          // 颜色填充
+          // fabric : {
+          //   type : 'Color',
+          //   uniforms : {
+          //     color : new Cesium.Color(1.0, 1.0, 0.0, 1.0)
+          //   }
+          // }
+          // 图片填充
+          fabric : {
+            type : 'Image',
+            uniforms : {
+              image: "/data/cesiumImage/Materials/waterNormals.jpg",
+              repeat: new Cesium.Cartesian2(10, 10)
+            }
+          }
+        })
+      })
+    }));
+  }
+
+
+
+
+
   // 返回模型数据
   getModel(modelObj: myObject) {
     if(!Object.keys(modelObj).length) return {}
     
     return {
-      url: modelObj.url || require("@/assets/data/Airplane.glb"),
+      url: modelObj.url || "/data/fly/scene.gltf",
       scale: modelObj.scale || 1,
-      minimumPixelSize: modelObj.minimumPixelSize || 70,
-      maximumScale: modelObj.maximumScale || 70
+      minimumPixelSize: modelObj.minimumPixelSize || 1000000,
+      maximumScale: modelObj.maximumScale || 10000000
     }
   }
 
