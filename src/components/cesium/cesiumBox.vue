@@ -29,7 +29,10 @@ onMounted(() => {
   // })
 
   const editEntity = new initCesium.EditEntity(viewer.viewer)
-  console.log(editEntity, 99999)
+
+
+  // 加载地形数据
+  editEntity.addTerrainData('/data/terrain/xiajiang/')
 
 
   // 统一管理实体
@@ -164,7 +167,6 @@ onMounted(() => {
     outlineWidth: 5
   }
   let points = editEntity.addPointPrimitives(position, paramsObj)
-  console.log(points.get(0), 111111)
 
 
   // 添加平面图元集合

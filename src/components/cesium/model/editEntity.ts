@@ -239,7 +239,6 @@ class editEntity {
   }
 
 
-  // 添加大量点位（图元数据）
 
 
   // 添加点位图元集合
@@ -289,7 +288,18 @@ class editEntity {
     }));
   }
 
+  // 加载地形文件数据
+  async addTerrainData(urlPath: string) {
+    const terrainProvider = await Cesium.CesiumTerrainProvider.fromUrl(
+        urlPath, {
+          requestWaterMask: true,
+          requestVertexNormals: true,
+        }
+    );
 
+    this.viewer.terrainProvider = terrainProvider;
+
+  }
 
 
 
