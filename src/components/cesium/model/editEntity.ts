@@ -25,6 +25,7 @@ class editEntity {
   // 处理自定义颜色
   setColor(color: string): Cesium.Color | '' {
     if (color) {
+      console.log(Cesium.Color.fromCssColorString(color), 99999)
       return Cesium.Color.fromCssColorString(color);
     }
     return ''
@@ -369,10 +370,94 @@ class editEntity {
         }
       }
     });
-
     // 为地形数据添加等高线
     this.viewer.scene.globe.material = material
   }
+
+  // 绘制晕眩图
+  addDizzinessDiagram() {
+    let material = new Cesium.Material({
+      fabric: {
+        type: 'ElevationRamp',
+        uniforms: {
+          image: '/data/color.png',
+          minimumHeight: 0, // 最低高度
+          maximumHeight: 500 // 最高高度
+        }
+      }
+    })
+    // 设置晕眩图
+    this.viewer.scene.globe.material = material
+  }
+
+  // cesium 支持多种材质同时渲染
+  addMultipleMaterial() {
+    let material = new Cesium.Material({
+      fabric: {
+        type: "MultipleMaterial", // 因为使用的是多种材质，这里的类型名称需要自定义
+        materials: {
+          contourMaterial: { // 等高线材质(这里的内容（contourMaterial）可以自定名称)
+            type : 'ElevationContour',
+            uniforms : {
+              color : this.setColor("red"), // 颜色
+              spacing: 50, // 等高线间距
+              width: 2, // 等高线宽度
+            }
+          },
+          dizzinessDiagramMaterial: {// 眩晕图材质
+            type: 'ElevationRamp',
+            uniforms: {
+              image: '/data/color.png',
+              minimumHeight: 0, // 最低高度
+              maximumHeight: 500 // 最高高度
+            }
+          }
+        },
+        components: {
+          diffuse: "contourMaterial.alpha == 0.0 ? dizzinessDiagramMaterial.diffuse : contourMaterial.diffuse",
+          alpha: "max(contourMaterial.alpha, dizzinessDiagramMaterial.alpha)"
+        }
+      },
+      // translucent: false
+    })
+
+    this.viewer.scene.globe.material = material
+  }
+
+  // 设置自定义材质
+  addCustomizeMaterial() {
+    let customizeMaterial =  Cesium.createElevationBandMaterial({
+      scene: this.viewer.scene,
+      layers: [
+        {
+          entries: [
+            {
+              height: 100,
+              color: Cesium.Color.BLUE
+            },
+            {
+              height: 200,
+              color: Cesium.Color.GREEN
+            }
+          ]
+        },
+        {
+          entries: [
+            {
+              height: 400,
+              color: Cesium.Color.BLUE
+            },
+            {
+              height: 500,
+              color: Cesium.Color.ORANGE
+            }
+          ]
+        },
+      ]
+    })
+    this.viewer.scene.globe.material = customizeMaterial
+  }
+
 
   // 加载地形文件数据
   async addTerrainData(urlPath: string) {

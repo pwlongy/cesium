@@ -188,7 +188,16 @@ onMounted(() => {
   editEntity.addWater(list)
 
   // 为地形数据添加等高线
-  editEntity.addContour()
+  // editEntity.addContour()
+
+  // 设置晕眩图
+  // editEntity.addDizzinessDiagram()
+
+  // 设置多种材质渲染
+  // editEntity.addMultipleMaterial()
+
+  // 设置自定义材料
+  editEntity.addCustomizeMaterial()
 });
 
 
