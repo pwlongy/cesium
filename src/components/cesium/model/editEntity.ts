@@ -288,8 +288,95 @@ class editEntity {
     }));
   }
 
+  // 添加贴底线
+  addStickGround(positionList?: number[], paramsObj?: myObject ) {
+    // 使用GroundPrimitive 完成贴地线的操作
+
+    let instance = new Cesium.GeometryInstance({
+      geometry : new Cesium.GroundPolylineGeometry({
+        positions : Cesium.Cartesian3.fromDegreesArray([
+          115.11221108836832, 27.081318249016455,
+          115.21221108836832, 27.181318249016455,
+          115.31221108836832, 27.281318249016455,
+          115.41221108836832, 27.381318249016455,
+          115.51221108836832, 27.481318249016455,
+          115.61221108836832, 27.581318249016455,
+          115.71221108836832, 27.681318249016455,
+          115.81221108836832, 27.781318249016455,
+          115.91221108836832, 27.881318249016455,
+          115.93122110883632, 27.981318249016455,
+          115.94122110883682, 27.10235681318249016455,
+        ]),
+        width : 4.0
+      }),
+      // attributes : {
+      //   color : Cesium.ColorGeometryInstanceAttribute.fromColor(Cesium.Color.fromCssColorString('green').withAlpha(0.7)),
+      //   distanceDisplayCondition : new Cesium.DistanceDisplayConditionGeometryInstanceAttribute(1000, 30000)
+      // },
+    });
+
+
+    this.viewer.scene.groundPrimitives.add(new Cesium.GroundPolylinePrimitive({
+      geometryInstances : instance,
+      appearance : new Cesium.PolylineMaterialAppearance({
+        material : Cesium.Material.fromType('Color' , {
+          color: this.setColor('red')
+        })
+      })
+    }));
+  }
+
+  // 绘制动态水面
+  addWater(positionList: number[]) {
+    // 添加平面数据
+    let instance = new Cesium.GeometryInstance({  // 图元对象
+      geometry : new Cesium.PolygonGeometry({  // 平面图元
+        polygonHierarchy : new Cesium.PolygonHierarchy(
+            Cesium.Cartesian3.fromDegreesArray(positionList)
+        )
+      })
+    });
+    this.viewer.scene.primitives.add(new Cesium.Primitive({
+      geometryInstances : instance,
+      appearance : new Cesium.EllipsoidSurfaceAppearance({
+        material : new Cesium.Material({  // 材质
+          // 配置材料
+          fabric : {
+            type : 'Water',
+            uniforms : {
+              normalMap : "/data/cesiumImage/Materials/waterNormals.jpg", // 动态水面的法线图片
+              frequency: 200, // 水波纹的数量
+              animationSpeed: 0.001, // 水流速度
+              amplitude: 10, // 水波纹震幅
+              specularIntensity: 20, // 镜面反射强度
+            }
+          }
+        })
+      })
+    }));
+  }
+
+  // 绘制等高线
+  addContour() {
+    // 设置等高线材质
+    let material = new Cesium.Material({
+      fabric : {
+        type : 'ElevationContour',
+        uniforms : {
+          color : this.setColor("red"), // 颜色
+          spacing: 50, // 等高线间距
+          width: 2, // 等高线宽度
+        }
+      }
+    });
+
+    // 为地形数据添加等高线
+    this.viewer.scene.globe.material = material
+  }
+
   // 加载地形文件数据
   async addTerrainData(urlPath: string) {
+    // 1.107版本之后推荐使用fromUrl
     const terrainProvider = await Cesium.CesiumTerrainProvider.fromUrl(
         urlPath, {
           requestWaterMask: true,
@@ -298,6 +385,16 @@ class editEntity {
     );
 
     this.viewer.terrainProvider = terrainProvider;
+
+    // 获取地形高度
+    // 将数据信息转换成为弧度
+    let pos1 = Cesium.Cartographic.fromDegrees(115.61221108836832, 27.881318249016455)
+    let pos2 = Cesium.Cartographic.fromDegrees(115.81221108836832, 28.881318249016455)
+    // 位置信息必须使用弧度
+    // 获取最精确的高度信息
+    Cesium.sampleTerrainMostDetailed(terrainProvider, [pos1, pos2]).then(res => {
+      console.log(res, 99999)
+    })
 
   }
 

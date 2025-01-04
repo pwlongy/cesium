@@ -16,6 +16,7 @@ class GeoJSON{
     promise.then(res => {
       this.viewer.dataSources.add(res)
       res.entities.values.forEach(item => {
+        // 处理状态数据
         console.log(item.polygon)
       })
       this.viewer.zoomTo(res)

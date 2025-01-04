@@ -91,6 +91,10 @@ onMounted(() => {
   // viewer.addentityGltf(modelPosition, url)
 
 
+  // 添加贴地线
+  editEntity.addStickGround()
+
+
   // 点位实时移动
   let pointList = [
     {
@@ -177,8 +181,17 @@ onMounted(() => {
     -70.0, 30.0,
     -68.0, 40.0
   ]
-  editEntity.addPolygonPrimitives(list)
+  // editEntity.addPolygonPrimitives(list)
+
+
+  // 添加动态水面
+  editEntity.addWater(list)
+
+  // 为地形数据添加等高线
+  editEntity.addContour()
 });
+
+
 
 // 设置点击实体
 let clickPoint = (data: myObject): void => {
