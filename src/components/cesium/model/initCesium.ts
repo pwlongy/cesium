@@ -14,6 +14,7 @@ import {
   position,
   modelPosition
 } from './interfaceBox/interfaceList'
+import {hasInjectionContext} from "vue";
 const subdomains: string[] = ["0", "1", "2", "3", "4", "5", "6", "7"];
 
 class initCesium {
@@ -167,19 +168,39 @@ class initCesium {
     }, Cesium.ScreenSpaceEventType.LEFT_CLICK); 
   }
   // 添加3dtitle 斜切摄影
-  // set3dTitles(url:string) {
-  //   try{
-  //     let tileset = new Cesium.Cesium3DTileset({
-  //       url: url,
-  //       maximumScreenSpaceError: 16, // 这个数据越大在里的很远的时候模糊，越近越清晰
-  //     });
-  //     this.viewer.scene.primitives.add(tileset)
-  //     this.viewer.zoomTo(tileset)
-  //   }catch(err) {
+  async set3dTitles(str:string) {
+    let tileset = await  Cesium.Cesium3DTileset.fromUrl(str,{
+      maximumScreenSpaceError: 16, // 这个数据越大在里的很远的时候模糊，越近越清晰
+    });
+    // 加载完成3dtitle数据后进行处理
+    // 获取中心点数据
+    let boundingSphere = tileset.boundingSphere
+    // 获取中心点
+    let cartographic = Cesium.Cartographic.fromCartesian(boundingSphere.center)
+    // 获取经纬度
+    const lng = cartographic.longitude
+    const lat = cartographic.latitude
+    const height = cartographic.height
 
-  //   }
+    // 世界坐标
+    const origin = Cesium.Cartesian3.fromRadians(lng, lat, height)
 
-  // }
+
+    // 设置便宜的位置
+    let changeHeight= height+ 100  // 向上偏移100m
+    const offset = Cesium.Cartesian3.fromRadians(lng, lat, changeHeight)
+
+    // 计算向量
+    //计算两个笛卡尔的分量差异。
+    const translate = Cesium.Cartesian3.subtract(offset, origin, new Cesium.Cartesian3())
+
+    // 进行矩阵偏移
+    tileset.modelMatrix = Cesium.Matrix4.fromTranslation(translate)
+
+    this.viewer.scene.primitives.add(tileset)
+    this.viewer.zoomTo(tileset)
+
+  }
 
   // 添加三维模型
   addentityGltf(modelPosition: modelPosition, url: string) {
