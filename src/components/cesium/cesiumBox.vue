@@ -194,10 +194,13 @@ onMounted(() => {
   // editEntity.addDizzinessDiagram()
 
   // 设置多种材质渲染
-  // editEntity.addMultipleMaterial()
+  editEntity.addMultipleMaterial()
 
   // 设置自定义材料
   editEntity.addCustomizeMaterial()
+
+  // 添加菜单
+  editEntity.addMenu()
 });
 
 

@@ -76,6 +76,22 @@ class initCesium {
         // show: true,
       })
     );
+    // 开启深度测试
+    this.viewer.scene.globe.depthTestAgainstTerrain = true
+    // 关闭相机碰撞测试 （相机可以进行穿过地底）
+    this.viewer.scene.screenSpaceCameraController.enableCollisionDetection = false
+    // 开启地形透明
+    // this.viewer.scene.globe.translucency.enabled = true
+    // // 设置在什么高度的时候开启地形透明
+    // this.viewer.scene.globe.translucency.frontFaceAlphaByDistance = new Cesium.NearFarScalar(
+    //     100,
+    //     0,
+    //     1000,
+    //     1
+    // )
+
+
+
     // 加载矢量底图
     this.viewer.imageryLayers.addImageryProvider(
       new Cesium.WebMapTileServiceImageryProvider({

@@ -91,6 +91,14 @@ interface modelPosition {
   lat: number,
   height?: number
 }
+interface layers {
+  entries: Material[],
+
+}
+interface Material {
+  height: number,
+  color: Cesium.Color
+}
 export {
   Options,
   entitiesObj,
@@ -102,5 +110,7 @@ export {
   timeObj,
   myProperty,
   cameraObj,
-  modelPosition
+  modelPosition,
+  Material,
+  layers
 }

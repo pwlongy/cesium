@@ -1,11 +1,15 @@
 
 import * as Cesium from "cesium";
+import * as dat from 'dat.gui';
 import {
   myObject,
   dataSourceList,
   timeObj,
   myProperty,
-  cameraObj, modelPosition
+  cameraObj,
+  modelPosition,
+  Material,
+  layers
 } from './interfaceBox/interfaceList'
 class editEntity {
   viewer: Cesium.Viewer
@@ -25,7 +29,6 @@ class editEntity {
   // 处理自定义颜色
   setColor(color: string): Cesium.Color | '' {
     if (color) {
-      console.log(Cesium.Color.fromCssColorString(color), 99999)
       return Cesium.Color.fromCssColorString(color);
     }
     return ''
@@ -424,38 +427,109 @@ class editEntity {
     this.viewer.scene.globe.material = material
   }
 
+
   // 设置自定义材质
-  addCustomizeMaterial() {
+  addCustomizeMaterial(listMaterial?: Material[][]) {
+    // 默认值
+    let layers = [
+      {
+        entries: [
+          {
+            height: 100,
+            color: Cesium.Color.BLUE
+          },
+          {
+            height: 200,
+            color: Cesium.Color.GREEN
+          }
+        ]
+      },
+      {
+        entries: [
+          {
+            height: 400,
+            color: Cesium.Color.BLUE
+          },
+          {
+            height: 500,
+            color: Cesium.Color.ORANGE
+          }
+        ]
+      },
+    ]
+    let listlayers:layers[] = []
+    listMaterial?.forEach((item => {
+      let entriesList:Material[] = []
+      listlayers.push({
+        entries: entriesList
+      })
+      item.forEach(obj => {
+        entriesList.push({
+          height: obj.height,
+          color: obj.color
+        })
+      })
+    }))
+
     let customizeMaterial =  Cesium.createElevationBandMaterial({
       scene: this.viewer.scene,
-      layers: [
-        {
-          entries: [
-            {
-              height: 100,
-              color: Cesium.Color.BLUE
-            },
-            {
-              height: 200,
-              color: Cesium.Color.GREEN
-            }
-          ]
-        },
-        {
-          entries: [
-            {
-              height: 400,
-              color: Cesium.Color.BLUE
-            },
-            {
-              height: 500,
-              color: Cesium.Color.ORANGE
-            }
-          ]
-        },
-      ]
+      layers: listlayers.length ? listlayers : layers
     })
     this.viewer.scene.globe.material = customizeMaterial
+  }
+
+  // 添加菜单选项
+  addMenu() {
+    let controlers = {
+      height: 100,
+      interal: 100,
+      color1: "#FF0000",
+      color2: "#00FF00"
+    }
+    const gui = new dat.GUI();
+    let layers: layers[] = [
+      {
+        entries: [{
+          color: Cesium.Color.RED,
+          height: 100
+        },{
+          color: Cesium.Color.RED,
+          height: 100
+        }],
+      }, {
+        entries: [{
+          color: Cesium.Color.RED,
+          height: 100
+        },{
+          color: Cesium.Color.RED,
+          height: 100
+        }]
+      }
+    ]
+
+    gui.domElement.style.cssText = "posation: absolute; top: 10px; right: 10px; height: 500px";
+    const folder = gui.addFolder("菜单")
+    // 展开菜单
+    folder.open()
+    // 添加参数对象
+    const heightParams = folder.add(controlers, "height", 100, 1000)
+    heightParams.onChange((res:number) => {
+      layers[0].entries[0].height = res
+
+      console.log(res)
+    })
+    const interalParams = folder.add(controlers, "interal", 100, 1000)
+    interalParams.onChange((res:number) => {
+      console.log(res)
+    })
+    const color1Params = folder.addColor(controlers, "color1")
+    color1Params.onChange((res:string) => {
+      console.log(res)
+    })
+    const color2Params = folder.addColor(controlers, "color2")
+    color2Params.onChange((res:string) => {
+      console.log(res)
+    })
   }
 
 
