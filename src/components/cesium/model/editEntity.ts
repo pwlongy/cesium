@@ -11,6 +11,7 @@ import {
   Material,
   layers
 } from './interfaceBox/interfaceList'
+import * as cesium from "cesium";
 class editEntity {
   viewer: Cesium.Viewer
   dataSource: dataSourceList
@@ -27,11 +28,12 @@ class editEntity {
   }
 
   // 处理自定义颜色
-  setColor(color: string): Cesium.Color | '' {
+  setColor(color: string): Cesium.Color {
     if (color) {
       return Cesium.Color.fromCssColorString(color);
     }
-    return ''
+    // 设置默认传递的颜色为红色
+    return cesium.Color.RED
   }
   // 添加点位基本信息
   addPoint(lat: number, lng: number, options: myObject = {}, dataSourceName: string) {
@@ -532,6 +534,56 @@ class editEntity {
     })
   }
 
+
+  //  渲染白膜数据
+  addBuffyCoat() {
+
+  }
+
+  // 世界矩阵
+  computeModelMatrix(position:modelPosition):Cesium.Matrix4 {
+    const center = Cesium.Cartesian3.fromDegrees(position.lng, position.lat, position.height)
+    const matrix = Cesium.Transforms.eastNorthUpToFixedFrame(center)
+    return matrix
+  }
+
+  // 模型矩阵
+  computerEmitterModelMatrix():Cesium.Matrix4 {
+    let hpr = Cesium.HeadingPitchRoll.fromDegrees(10,0,20) // 设置粒子的朝向，滚装， 俯仰
+    let trs = new Cesium.TranslationRotationScale()
+    trs.translation = Cesium.Cartesian3.fromElements(0,0,0)
+    trs.rotation = Cesium.Quaternion.fromHeadingPitchRoll(hpr)
+    let result = Cesium.Matrix4.fromTranslationRotationScale(trs)
+    return result
+  }
+
+
+
+  // 粒子系统，生成粒子效果
+  addParticle() {
+    let particle = new Cesium.ParticleSystem({
+      image: '/OIP-C.png',
+      startColor: this.setColor("red"),   // 开始颜色
+      endColor: this.setColor("orange"),  // 结束颜色
+      startScale: 1,   // 开始图片比例
+      endScale: 5,      // 结束图片比例
+      minimumParticleLife: 1.5, //粒子生命的可能持续时间的最小范围，在该范围内可以随机选择粒子的实际生命
+      maximumParticleLife: 2,  // 粒子生命的可能持续时间的最大范围
+      minimumSpeed: 29,  // 粒子的最小速度
+      maximumSpeed: 30,   // 粒子的最大速度
+      imageSize: new Cesium.Cartesian2(1,1), // 图片大小
+      sizeInMeters: true, // 大小是否为米
+      emissionRate: 100, // 每分钟生产多少粒子
+      emitter: new Cesium.CircleEmitter(10), // 粒子发射器
+      modelMatrix: this.computeModelMatrix({lng:-72.0, lat: 40, height: 4}), // 将粒子系统从模型转换为世界坐标的4x4转换矩阵。
+      emitterModelMatrix: this.computerEmitterModelMatrix() // 粒子系统局部坐标系内转换粒子系统发射器的4x4转换矩阵。
+    })
+    this.viewer.scene.primitives.add(particle)
+
+    this.viewer.camera.setView({
+      destination: Cesium.Cartesian3.fromDegrees(-72.0, 40, 500)
+    })
+  }
 
   // 加载地形文件数据
   async addTerrainData(urlPath: string) {

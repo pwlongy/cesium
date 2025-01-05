@@ -184,6 +184,7 @@ onMounted(() => {
   // editEntity.addPolygonPrimitives(list)
 
 
+
   // 添加动态水面
   editEntity.addWater(list)
 
@@ -201,6 +202,9 @@ onMounted(() => {
 
   // 添加菜单
   editEntity.addMenu()
+
+  // 添加粒子效果
+  editEntity.addParticle()
 });
 
 

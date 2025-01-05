@@ -46,7 +46,7 @@ class initCesium {
       navigationHelpButton: false, //场景模式
       navigationInstructionsInitiallyVisible: false,
       scene3DOnly: false,
-      shouldAnimate: false,
+      shouldAnimate: true, // 使用粒子效果的时候，允许出现动画效果
       useDefaultRenderLoop: true,
       showRenderLoopErrors: false,
       automaticallyTrackDataSourceClocks: false,
@@ -77,9 +77,9 @@ class initCesium {
       })
     );
     // 开启深度测试
-    this.viewer.scene.globe.depthTestAgainstTerrain = true
+    // this.viewer.scene.globe.depthTestAgainstTerrain = true
     // 关闭相机碰撞测试 （相机可以进行穿过地底）
-    this.viewer.scene.screenSpaceCameraController.enableCollisionDetection = false
+    // this.viewer.scene.screenSpaceCameraController.enableCollisionDetection = false
     // 开启地形透明
     // this.viewer.scene.globe.translucency.enabled = true
     // // 设置在什么高度的时候开启地形透明
