@@ -705,6 +705,60 @@ class editEntity {
     });
   }
 
+  // 添加图钉图标
+  async addPinIcon(position: modelPosition) {
+    let pinBuilder = new Cesium.PinBuilder ()
+
+    // 设置颜色图标
+    let colorPine = pinBuilder.fromColor(this.setColor('red'), 100).toDataURL()
+    let entity = this.viewer.entities.add({
+      name: 'colorpin',
+      id: '11',
+      position: Cesium.Cartesian3.fromDegrees(position.lng, position.lat, position.height),
+      label: {
+        text: "123",
+        font: "20px sans-serif",
+        horizontalOrigin: Cesium.HorizontalOrigin.CENTER,
+        verticalOrigin: Cesium.VerticalOrigin.TOP,
+      },
+      billboard: {
+        image: colorPine,
+        width: 100,
+        height: 40,
+      }
+    })
+
+    // 设置文本图钉
+    let textPin = pinBuilder.fromText('Hello', this.setColor("blue"), 100).toDataURL()
+    let textentity = this.viewer.entities.add({
+      name: 'colorpin',
+      id: '2',
+      position: Cesium.Cartesian3.fromDegrees(position.lng+0.1, position.lat+0.1, position.height),
+      billboard: {
+        image: textPin,
+        width: 100,
+        height: 40,
+      }
+    })
+    // 设置自身存在的图标
+    // id需要查看自身存在那些图标名称，不能自定义
+    let iconPin = await pinBuilder.fromMakiIconId ('car', this.setColor("blue"), 100)
+    let iconentity = this.viewer.entities.add({
+      name: 'colorpin',
+      id: '3',
+      position: Cesium.Cartesian3.fromDegrees(position.lng+0.2, position.lat+0.2, position.height),
+      billboard: {
+        image: iconPin,
+        width: 100,
+        height: 40,
+      }
+    })
+
+
+
+    this.viewer.zoomTo(entity)
+  }
+
 
   // 返回模型数据
   getModel(modelObj: myObject) {
@@ -846,6 +900,24 @@ class editEntity {
   // 删除数据源中的所有实体
   removeAllEntity(dataSourceName: string) {
     this.dataSource[dataSourceName].entities.removeAll();
+  }
+
+  // 切换维度
+  changeMapView(type: number = 3){
+    switch (type) {
+      // 二维视图
+      case 2:
+        this.viewer.scene.mode = Cesium.SceneMode.SCENE2D;
+        break;
+      // 三维视图
+      case 3:
+        this.viewer.scene.mode = Cesium.SceneMode.SCENE3D;
+        break;
+      // 哥伦布视图
+      case 1:
+        this.viewer.scene.mode = Cesium.SceneMode.COLUMBUS_VIEW;
+        break;
+    }
   }
 
 }

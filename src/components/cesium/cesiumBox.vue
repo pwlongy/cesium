@@ -10,7 +10,6 @@ import {
   myObject,
 } from './model/interfaceBox/interfaceList'
 import { onMounted } from "vue";
-import editEntity from "@/components/cesium/model/editEntity";
 
 // 设置所有统一管理的数据源
 const dataSource = ["points", "polylines", "polygons"]
@@ -31,6 +30,8 @@ onMounted(() => {
 
   const editEntity = new initCesium.EditEntity(viewer.viewer)
 
+  // 切换视图模式
+  // editEntity.changeMapView(2)
 
   // 加载地形数据
   editEntity.addTerrainData('/data/terrain/xiajiang/')
@@ -218,6 +219,15 @@ onMounted(() => {
     height: 0
   }
   editEntity.setlabelBillboard(labelBillboardposition, sethtml)
+
+
+  // 添加图钉内容
+  const pinPosition:modelPosition = {
+    lng: 116.02221108836832,
+    lat: 27.591318249016455,
+    height: 0,
+  }
+  editEntity.addPinIcon(pinPosition)
 });
 
 
@@ -232,6 +242,8 @@ let sethtml = () => {
 let clickPoint = (data: myObject): void => {
   console.log(121111111, data)
 }
+
+
 
 
 
