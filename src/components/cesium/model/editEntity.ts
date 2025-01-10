@@ -690,6 +690,21 @@ class editEntity {
     return new labelBillboard(this.viewer, position, HtmlResult)
   }
 
+  // 设置天空盒子
+  addskyBox() {
+    // 设置天空盒子的六张图片
+    this.viewer.scene.skyBox = new Cesium.SkyBox({
+      sources : {
+        positiveX : 'skybox_px.png',
+        negativeX : 'skybox_nx.png',
+        positiveY : 'skybox_py.png',
+        negativeY : 'skybox_ny.png',
+        positiveZ : 'skybox_pz.png',
+        negativeZ : 'skybox_nz.png'
+      }
+    });
+  }
+
 
   // 返回模型数据
   getModel(modelObj: myObject) {
