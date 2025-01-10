@@ -9,15 +9,16 @@ export default class labelBillboard {
   id: string
   viewer: Cesium.Viewer
   position: Cesium.Cartesian3
-  element: string | HTMLDivElement
+  elementStr: string
+  element: HTMLDivElement
   maxRenderDis: number
   show: boolean
   constructor(viewer:Cesium.Viewer, position:options, HtmlResult: Function | string, options:options = {}) {
     this.options = options;
     this.id = options.type + options.id;
     // 判断传递过来的数据类型
-    let elementObj:string | HTMLDivElement = HtmlResult instanceof Function ? HtmlResult() : HtmlResult;
-    // console.log(HtmlResult);
+    let elementObj:string = HtmlResult instanceof Function ? HtmlResult() : HtmlResult;
+    console.log(elementObj);
     // 经纬度不存在的时候直接return
     if (!position.lng || !position.lat) return;
 
@@ -27,7 +28,7 @@ export default class labelBillboard {
       position.lat,
       position.height || 0
     );
-    this.element = elementObj;
+    this.elementStr = elementObj;
     // 获取相机高度
     this.maxRenderDis =
       Math.round(viewer.camera.positionCartographic.height) * 5;
@@ -42,7 +43,8 @@ export default class labelBillboard {
     // userBox.id = this.id;
     userBox.style.position = "absolute";
     userBox.className = "resultMarker";
-    userBox.innerHTML = JSON.stringify(this.element);
+    userBox.innerHTML = this.elementStr;
+    console.log(userBox, 1111)
     this.element = userBox;
     // 自定义html
 

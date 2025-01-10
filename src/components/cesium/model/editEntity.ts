@@ -1,6 +1,7 @@
 
 import * as Cesium from "cesium";
 import * as dat from 'dat.gui';
+import labelBillboard from './labelBillboard'
 import {
   myObject,
   dataSourceList,
@@ -17,6 +18,7 @@ class editEntity {
   dataSource: dataSourceList
   manListproperty: myProperty
   ObjPrimitives: myObject
+  labelBillboard: typeof labelBillboard
   constructor(viewer: Cesium.Viewer) {
     this.viewer = viewer;
     // 统一管理实体资源
@@ -25,6 +27,7 @@ class editEntity {
     this.manListproperty = {};
     // 管理图元数据
     this.ObjPrimitives = {}
+    this.labelBillboard = labelBillboard
   }
 
   // 处理自定义颜色
@@ -580,9 +583,82 @@ class editEntity {
     })
     this.viewer.scene.primitives.add(particle)
 
-    this.viewer.camera.setView({
-      destination: Cesium.Cartesian3.fromDegrees(-72.0, 40, 500)
+    // this.viewer.camera.setView({
+    //   destination: Cesium.Cartesian3.fromDegrees(-72.0, 40, 500)
+    // })
+  }
+
+  // 创建管线
+  addPipeline() {
+
+    function computeCircle(radius:number): Cesium.Cartesian2[] {
+      let position = []
+      for (let i = 0; i < 360; i++){
+        let radians = Cesium.Math.toRadians(i) // 将角度转换成为弧度
+        position.push(
+            new Cesium.Cartesian2(
+                radius * Math.cos(radians),
+                radius* Math.sin(radians)
+            )
+        )
+        i += 20
+      }
+      return position
+    }
+
+    // PolylineVolumeGeometry
+    this.viewer.entities.add({
+      polylineVolume: {
+        positions: Cesium.Cartesian3.fromDegreesArray([
+          115.01221108836832, 27.581318249016455,
+          116.01221108836832, 28.581318249016455,
+          116.01221108836832, 27.581318249016455,
+        ]), // 管线点的位置
+        shape: computeCircle(10), // 设置管线形状， 通过角度转换弧度的方式完成
+        material: this.setColor("blue"), // 材质
+        outline: true, // 外部边框线条
+        outlineColor: this.setColor("red"), // 外部边框线条颜色
+        outlineWidth: 2, // 线条宽度
+        fill: true, // 是否需要材质填充体积
+        cornerType: Cesium.CornerType.MITERED, // 设计拐角样式
+      }
     })
+
+  }
+
+  // 当管线出现大量数据的时候，使用Primitive来实现管线的添加
+  addPrimitivePipeline() {
+    const positions = Cesium.Cartesian3.fromDegreesArray([
+      115.01221108836832, 27.581318249016455,
+      116.01221108836832, 28.581318249016455,
+      116.01221108836832, 27.581318249016455,
+    ])
+
+    // 创建几何体
+    const pipelineGeometry = new Cesium.PolylineGeometry({
+      positions: positions,
+      width: 10.0, // 管线宽度
+      vertexFormat: Cesium.VertexFormat.POSITION_ONLY
+    });
+
+    // 创建外观
+    const pipelineAppearance = new Cesium.PolylineMaterialAppearance({
+      material: Cesium.Material.fromType('Color', {
+        color: Cesium.Color.RED
+      })
+    });
+
+    // 创建 Primitive
+    const pipelinePrimitive = new Cesium.Primitive({
+      geometryInstances: new Cesium.GeometryInstance({
+        geometry: pipelineGeometry
+      }),
+      appearance: pipelineAppearance,
+      asynchronous: false
+    });
+
+    // 添加到场景
+    this.viewer.scene.primitives.add(pipelinePrimitive);
   }
 
   // 加载地形文件数据
@@ -609,6 +685,10 @@ class editEntity {
 
   }
 
+  // 添加自定义广告牌
+  setlabelBillboard(position: modelPosition, HtmlResult: Function | string) {
+    return new labelBillboard(this.viewer, position, HtmlResult)
+  }
 
 
   // 返回模型数据

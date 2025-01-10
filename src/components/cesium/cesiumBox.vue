@@ -4,6 +4,7 @@
 
 <script setup lang="ts">
 import initCesium from "./model/initCesium";
+import {modelPosition} from "./model/interfaceBox/interfaceList"
 
 import {
   myObject,
@@ -205,9 +206,27 @@ onMounted(() => {
 
   // 添加粒子效果
   editEntity.addParticle()
+
+  // 添加管线
+  editEntity.addPipeline()
+  // editEntity.addPrimitivePipeline()
+
+  // 添加自定义广告牌
+  let labelBillboardposition:modelPosition = {
+    lng:  -72.0,
+    lat: 40.0,
+    height: 0
+  }
+  editEntity.setlabelBillboard(labelBillboardposition, sethtml)
 });
 
 
+// 自定义广告牌内容
+let sethtml = () => {
+  return `
+    <div class="sethtmltitle">1111</div>
+  `.trim()
+}
 
 // 设置点击实体
 let clickPoint = (data: myObject): void => {
@@ -227,7 +246,19 @@ let clickPoint = (data: myObject): void => {
 
 
 </script>
+<style lang="scss">
+  .sethtmltitle{
+    width: 100px;
+    height: 40px;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    color: #ffffff;
+    padding-left: 20px;
+    background: rebeccapurple;
+  }
 
+</style>
 <style lang="scss" scoped>
 #cesiumcontainer {
   width: 100%;
