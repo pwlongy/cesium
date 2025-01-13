@@ -18,7 +18,6 @@ export default class labelBillboard {
     this.id = options.type + options.id;
     // 判断传递过来的数据类型
     let elementObj:string = HtmlResult instanceof Function ? HtmlResult() : HtmlResult;
-    console.log(elementObj);
     // 经纬度不存在的时候直接return
     if (!position.lng || !position.lat) return;
 
@@ -44,7 +43,6 @@ export default class labelBillboard {
     userBox.style.position = "absolute";
     userBox.className = "resultMarker";
     userBox.innerHTML = this.elementStr;
-    console.log(userBox, 1111)
     this.element = userBox;
     // 自定义html
 

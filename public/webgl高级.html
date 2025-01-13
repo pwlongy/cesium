@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>高级课程-创建webgl环境</title>
+</head>
+<body>
+    <canvas id="glCavas" width="200" height="200" style="background: #409eff"></canvas>
+    <script>
+        // 1. 创建canvas标签
+        const canvas = document.getElementById('glCavas');
+        console.log(canvas);
+        // 2. 获取webgl上下文
+        let gl = canvas.getContext('webgl')
+        console.log(gl)
+
+        // 3. 编写着色器语言
+        // 顶点着色器（控制形状）
+        /*
+        *   声明变量的方式
+        *   attribute vec2 a_position; 表示声明两位
+        *
+        * */
+        const vertexShaderSource = `
+            attribute vec2 a_position;
+            void main() {
+                gl_PointSize = 10.0;
+                gl_Position = vec4(a_position,0.0,1.0);
+            }
+        `
+        // 片元作色器（控制颜色）
+        const fragmentShaderSource = `
+            void main() {
+                gl_FragColor = vec4(0.0,0.0,0.0,1.0);
+            }
+        `
+
+        // 4. 创建着色器
+        const vShader = gl.createShader(gl.VERTEX_SHADER);
+        const fShader = gl.createShader(gl.FRAGMENT_SHADER);
+
+        // 5. 将编写的着色器程序注入着色器
+        gl.shaderSource(vShader, vertexShaderSource)
+        gl.shaderSource(fShader, fragmentShaderSource)
+
+        // 6. 创建program
+        const program = gl.createProgram();
+
+        // 7. program附着着色器
+        gl.attachShader(program, vShader)
+        gl.attachShader(program, fShader)
+
+        // 8. 编译着色器
+        gl.compileShader(vShader)
+        gl.compileShader(fShader)
+
+        // 9. 链接着色器
+        gl.linkProgram(program)
+
+        // 10. 使用着色器
+        gl.useProgram(program)
+
+            // 获取变量点位
+            let a_position = gl.getAttribLocation(program, 'a_position');
+            console.log(a_position, 111111)
+            // 开启变量点位
+            gl.enableVertexAttribArray(a_position)
+            // 写入数据
+
+
+        // 11. 绘制元素
+        gl.drawArrays(gl.POINTS, 0 ,1)
+    </script>
+
+</body>
+</html>

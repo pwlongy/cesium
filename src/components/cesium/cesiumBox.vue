@@ -235,7 +235,7 @@ onMounted(() => {
 let sethtml = () => {
   return `
     <div class="sethtmltitle">1111</div>
-  `.trim()
+  `
 }
 
 // 设置点击实体
