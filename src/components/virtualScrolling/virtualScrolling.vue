@@ -1,8 +1,8 @@
 <template>
   <!-- 用户视口 -->
-  <div class="itemList" ref="viewport">
+  <div class="itemList" ref="viewport" :style="{height: rowHeight * viewCount + 'px'}" @scroll="onscroll">
     <!-- 滚动条 -->
-    <div class="scrllbar" ref="scrllbar"></div>
+    <div class="scrllbar" ref="scrllbar" :style="{height: bigList.length * rowHeight + 'px'}"></div>
     <!-- 子元素超出父元素高度才能实现 -->
     <div class="listBox">
       <div v-for="item in newlist" class="item">{{ item.n }}</div>
@@ -37,11 +37,12 @@ import {
   console.log(props)
 
 // 设置默认截取数据位置
-let start: number = 0;
-let end: number = 20;
+let start = ref(0);
+let end = ref(20);
 
 // 获取Dom元素对象
 let currentInstance = getCurrentInstance();
+let viewport = ref()
 
 // 处理高度
 onMounted(() => {
@@ -55,8 +56,20 @@ console.log(bigList)
 
 // 计算属性截取数据
 let newlist = computed(() => {
+  console.log(123456)
   return bigList.value.slice(start, end);
 });
+
+// 滚动条滚动
+const onscroll = () => {
+  console.log(viewport.value.scrollTop)
+  // 计算滚动条滚动高度
+  const scrollTop = viewport.value.scrollTop;
+  // 判断需要从第几条开始截取数据
+  start = Math.round(scrollTop / props.rowHeight)
+  // 变换数据显示
+
+}
 </script>
 
 <style scoped lang="scss">

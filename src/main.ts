@@ -18,6 +18,13 @@ app.config.globalProperties.$sparkMd5 = SparkMD5
 app.config.globalProperties.$formatDate = formatDate
 
 
+// declare module 'vue' {
+//     interface ComponentCustomProperties {
+//         $func: typeof axios
+//         $translate: (key: string) => string
+//     }
+// }
+
 
 
 // 外部引入资源
